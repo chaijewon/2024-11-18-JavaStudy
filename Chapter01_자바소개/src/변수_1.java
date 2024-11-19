@@ -154,7 +154,7 @@
  *           단어가 두개 
  *           kor_score
  *           _kor : 임시변수 
- *           file_name ., file_size ...
+ *           file_name ., file_size ...  *** fileName
  *     4. 키워드는 사용 할 수 없다 
  *        ==== 자바에서 사용하는 단어 
  *     5. 공백을 사용할 수 없다 
