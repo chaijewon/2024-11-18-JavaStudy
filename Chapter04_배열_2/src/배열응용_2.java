@@ -69,6 +69,9 @@ public class 배열응용_2 {
 			System.out.print(c+"\t");
 		}
 		
+		
+		
+		
 		System.out.println();
 		for(int i=1;i<=lastday[month-1];i++)
 		{
