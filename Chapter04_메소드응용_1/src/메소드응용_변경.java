@@ -146,7 +146,7 @@ public class 메소드응용_변경 {
 				else
 				{
 					System.out.println("Game Over!!");
-					break;
+					System.exit(0);//프로그램 종료 
 				}
 			}
 		}
