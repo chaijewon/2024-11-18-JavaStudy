@@ -45,6 +45,56 @@ public class 메소드_2 {
     	System.out.println("5. 종료");
     	System.out.println("==================");
     }
+    static void seoulList(int page)
+    {
+    	String[] movie=seoulData.split("\n");
+    	int i=0;// for 횟수
+    	int j=0;// 20개씩 
+    	final int ROWSIZE=20;// 시작점 
+    	int pagecnt=(page*ROWSIZE)-ROWSIZE;
+    	//            1page => 0
+    	//            2page => 20
+    	//            3page => 40 
+    	for(String s:movie)
+    	{
+    		//System.out.println(s);
+    		if(j<20 && i>=pagecnt)
+    		{
+    		  String[] md=s.split("\\|");
+    		  System.out.println(md[0]+"."+md[1]);
+    		  j++;
+    		}
+    		i++;
+    		
+    	}
+    	
+    }
+    // 상세보기 => 데이터 
+    static void seoulDetail(int seoulNo)
+    {
+    	String[] movie=seoulData.split("\n");
+    	// 영화 정보 전체 => \n
+    	for(String s:movie)
+    	{
+    		// 영화 한개 => 정보 => |
+    		String[] info=s.split("\\|");
+    		// info[0] => String 
+    		/*
+    		 *   String int
+    		 *     |     |===> valueOf
+    		 *    int    String
+    		 *    ---- parseInt()
+    		 */
+    		if(info[0].equals(String.valueOf(seoulNo)))
+    		{
+    			System.out.println("명소:"+info[1]);
+    			System.out.println("소개:"+info[2]);
+    			System.out.println("주소:"+info[3]);
+    			
+    			break;
+    		}
+    	}
+    }
     /*
      *   검색 
      *    => String[] arr=new String[15]; => List
@@ -113,7 +163,15 @@ public class 메소드_2 {
     			  System.exit(0);//0 => 정상 종료 -1:비정상 종료 
     		  case 1:
     			  // 고민 => 데이터를 받아서 출력 , 메소드안에서 출력
+    			  System.out.print("페이지 입력:");
+      			  int page=scan.nextInt();
+      			  seoulList(page);
     			  break;
+    		  case 2:
+    			  System.out.print("명소 선택(1~273):");
+      			  int no=scan.nextInt();
+      			  seoulDetail(no);
+      			  break;
     		  case 3: case 4:
     			  System.out.print("명소(1),주소(2):");
     			  int type=scan.nextInt();
@@ -126,6 +184,7 @@ public class 메소드_2 {
     				   System.out.println(s);
     			  }
     			  break;
+    			
     		}
     	}
     }
