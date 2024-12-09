@@ -184,7 +184,7 @@ public class 메소드_2 {
     				   System.out.println(s);
     			  }
     			  break;
-    			
+    			  
     		}
     	}
     }
