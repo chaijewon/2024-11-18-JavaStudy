@@ -69,11 +69,15 @@ implements ActionListener
 	  {
 		  gm=new GenieMusicSystem();
 		  la.setText("지니뮤직 Top50");
+		  b1.setEnabled(false);
+		  b2.setEnabled(true);
 	  }
 	  else
 	  {
 		  gm=new MelonMusicSystem();
 		  la.setText("멜론 Top50");
+		  b2.setEnabled(false);
+		  b1.setEnabled(true);
 	  }
 	  
 	  
@@ -96,6 +100,7 @@ implements ActionListener
 		if(e.getSource()==b1)//b1버튼 클릭
 		{
 			musicPrint(1);
+			
 		}
 		else if(e.getSource()==b2)
 		{

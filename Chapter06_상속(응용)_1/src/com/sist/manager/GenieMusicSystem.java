@@ -57,5 +57,31 @@ public class GenieMusicSystem {
   {
 	  return musics;
   }
-  
+  public MusicVO[] musicFindData(String fd)
+  {
+	  int count=0;
+	  for(MusicVO vo:musics)
+	  {
+		  if(vo.getTitle().contains(fd))
+		  {
+			  count++;
+		  }
+	  }
+	  // 동적 배열 생성 => 가변 Collection 
+	  MusicVO[] music=new MusicVO[count];
+	  
+	  // 배열의 단점 => 메모리 갯수를 고정한다 
+	  int i=0;
+	  for(MusicVO vo:musics)
+	  {
+		  if(vo.getTitle().contains(fd))
+		  {
+			  music[i]=vo;
+			  //  클래스는 주소값을 대입 
+			  i++;
+		  }
+	  }
+	  
+	  return music;
+  }
 }

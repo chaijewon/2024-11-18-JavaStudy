@@ -5,18 +5,33 @@ import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+///////////////////////////////
+import com.sist.vo.*;
+import com.sist.manager.*;
+/////////////////////////////// Back
+import java.awt.event.*;
+// 행위 => 마우스 / 키보드 => 사건 => 사건에 처리 
+// 사건이 발생하면 => 사건정보를 프로그래머로 넘겨준다
+//                 -------------- 메소드가 구현이 안됨
+// 추상 / 인터페이스 
+// 웹 => JavaScript
 
-public class MusicFindPanel extends JPanel{
+public class MusicFindPanel extends JPanel
+implements ActionListener
+{
 	  JLabel la;
 	  JButton b1,b2;
 	  JTable table;
 	  DefaultTableModel model;
 	  JTextField tf;
+	  
+	  GenieMusicSystem gm=new GenieMusicSystem();
 	  public MusicFindPanel()
 	  {
 		  setLayout(null);
@@ -36,6 +51,52 @@ public class MusicFindPanel extends JPanel{
 		  JScrollPane js=new JScrollPane(table);
 		  js.setBounds(10,105,760,400);
 		  add(js);
-		  
+		  tf.addActionListener(this);
 	  }
+	/*
+	 *    Event 
+	 *     버튼 / 텍스트 엔터 / 메뉴 actionPerformed
+	 *    마우스 
+	 *      mouseClicked , mouseReleased mousePressed
+	 *      mouseEntered mouseExited
+	 *    키보드 
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==tf) // 엔터 
+		{
+			// 입력 데이터 읽기 
+			String fd=tf.getText();
+			if(fd.trim().length()<1)
+			{
+				// 입력이 안된 상태 
+				JOptionPane.showMessageDialog(this, "검색어를 입력하세요");
+				tf.requestFocus();
+				return;
+			}
+			musicFind(fd);
+		}
+	}
+	public void musicFind(String fd)
+	{
+		for(int i=model.getRowCount()-1;i>=0;i--)
+		{
+			model.removeRow(i);
+		}
+		
+		MusicVO[] music=gm.musicFindData(fd);
+		
+		for(MusicVO vo:music)
+		{
+			String[] data= {
+				String.valueOf(vo.getNo()),
+				vo.getTitle(),
+				vo.getSinger(),
+				vo.getAlbum()
+			};
+			model.addRow(data);
+		}
+	}
+	  
 }
