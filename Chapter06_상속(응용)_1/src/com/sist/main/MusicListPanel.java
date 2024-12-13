@@ -43,6 +43,11 @@ implements ActionListener
 	  
 	  b1.addActionListener(this);//이벤트 등록 
 	  b2.addActionListener(this);
+	  table.setRowHeight(40);
+	  table.getColumnModel().getColumn(0).setPreferredWidth(80);
+	  table.getColumnModel().getColumn(1).setPreferredWidth(320);
+	  table.getColumnModel().getColumn(2).setPreferredWidth(300);
+	  table.getColumnModel().getColumn(3).setPreferredWidth(200);
   }
   public void musicPrint(int type)
   {
