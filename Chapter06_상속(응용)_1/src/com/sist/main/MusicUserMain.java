@@ -26,6 +26,8 @@ public class MusicUserMain extends JFrame{
     	// 크기 
     	setSize(800, 600);
     	setVisible(true);
+    	// hide
+    	setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
