@@ -17,7 +17,7 @@ public class MelonMusicSystem extends GenieMusicSystem{
 			  // int a=10/0; // 프로그램 종료
 			  Document doc=Jsoup.connect("https://www.melon.com/chart/index.htm").get();
 			  Elements title=doc.select("div.wrap_song_info div.rank01");
-			  Elements singer=doc.select("div.wrap_song_info div.rank02");
+			  Elements singer=doc.select("div.wrap_song_info div.rank02 a:eq(0)");
 			  Elements album=doc.select("div.wrap_song_info div.rank03");
 			  
 			  for(int i=0;i<50;i++)
@@ -43,4 +43,7 @@ public class MelonMusicSystem extends GenieMusicSystem{
 	  // musicFindData(String fd)
 	  // static , 생성자 , 초기화 블록 제외 => 추가
 	  // 포함 클래스를 더 많이 사용한다 => 제약 
+	public static void main(String[] args) {
+		MelonMusicSystem ms=new MelonMusicSystem();
+	}
 }
