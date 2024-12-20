@@ -56,6 +56,7 @@ implements ActionListener
 		else if(e.getSource()==b1)
 		{
 			int n1=0,n2=0;
+			// if문 처리가 어려운 경우 
 			try
 			{
 			  String no1=tf1.getText();
@@ -77,6 +78,31 @@ implements ActionListener
 			}
 			
 			String op=box.getSelectedItem().toString();
+			
+			switch(op)
+			{
+			  case "+":
+				 tf3.setText(String.valueOf(n1+n2));
+				 break;
+			  case "-":
+				 tf3.setText(String.valueOf(n1-n2));
+				 break;
+			  case "*":
+				 tf3.setText(String.valueOf(n1*n2));
+				 break;
+			  case "/":
+				 if(n2==0)
+				 {
+					 JOptionPane.showMessageDialog(this, "0으로 나눌 수 없다");
+					 tf2.setText("");
+					 tf2.requestFocus();
+				 }
+				 else
+				 {
+					 tf3.setText(String.valueOf(n1/(double)n2)); 
+				 }
+				 break;
+			}
 			
 			
 		}
