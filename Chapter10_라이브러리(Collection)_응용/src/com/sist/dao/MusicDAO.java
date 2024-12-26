@@ -101,7 +101,7 @@ public class MusicDAO {
 	// 5. 뮤직 상세보기 
 	// 6. 뮤직 검색 
 	// DAO => 공용 (웹, 윈도우 , 애플리케이션)
-	
+	// return selectList(sql)
 	public List<MusicVO> musicFindData(String fd)
 	{
 		List<MusicVO> list=new ArrayList<MusicVO>();
@@ -144,6 +144,39 @@ public class MusicDAO {
 			disConnection();
 		}
 		return list;
+	}
+	
+	// 동영상 키 
+	public String getKey(int mno)
+	{
+		String key="";
+		try
+		{
+			// 1. 연결 
+			getConnection();
+			// 2. SQL문장 제작
+			// DISTINCT => 중복제거 
+			String sql="SELECT DISTINCT key FROM genie_music "
+					  +"WHERE mno="+mno;
+			// 3. 오라클로 SQL전송 
+			ps=conn.prepareStatement(sql);
+			// 4. 실행후에 결과값 받기
+			ResultSet rs=ps.executeQuery();
+			// 5. 값을 채워서 대기 
+			rs.next();
+			key=rs.getString(1);
+			rs.close();
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+			// 에러 확인 
+		}
+		finally
+		{
+			disConnection();
+			// 오라클 연결 해제 
+		}
+		return key;
 	}
 	
 }
