@@ -16,6 +16,7 @@ implements ActionListener,MouseListener
     BoardDetail bDetail=new BoardDetail();
     BoardInsert bInsert=new BoardInsert();
     BoardUpdate bUpdate=new BoardUpdate();
+    BoardDelete bDelete=new BoardDelete();
     // 게시판 관리자 
     BoardManager bm=new BoardManager();
     // 변수 설정 
@@ -24,11 +25,13 @@ implements ActionListener,MouseListener
     public BoardMainForm()
     {
     	setLayout(card);
+    	
     	// 추가 
     	add("LIST",bList);
     	add("DETAIL",bDetail);
     	add("INSERT",bInsert);
     	add("UPDATE",bUpdate);
+    	add("DELETE",bDelete);
     	
     	setTitle("윈도우 게시판 ver 1.0");
     	listPrint();
@@ -53,6 +56,10 @@ implements ActionListener,MouseListener
     	bDetail.b1.addActionListener(this);
     	// 삭제
     	bDetail.b2.addActionListener(this);
+    	
+    	// 실제 삭제
+    	bDelete.b1.addActionListener(this);// 삭제
+    	bDelete.b2.addActionListener(this);// 취소
     }
     public void listPrint()
     {
@@ -194,6 +201,62 @@ implements ActionListener,MouseListener
 			card.show(getContentPane(), "LIST");
 			listPrint();
 		}
+		else if(e.getSource()==bDetail.b2)
+		{
+			card.show(getContentPane(), "DELETE");
+			// 화면 변경 
+		}
+		else if(e.getSource()==bDetail.b1)
+		{
+			// 수정 요청 
+			String no=bDetail.no.getText();
+			BoardVO vo=
+					bm.boardUpdateData(Integer.parseInt(no));
+			card.show(getContentPane(), "UPDATE");
+			bUpdate.nameTf.setText(vo.getName());
+			bUpdate.subTf.setText(vo.getSubject());
+			bUpdate.ta.setText(vo.getContent());
+		}
+		
+		else if(e.getSource()==bDelete.b2)
+		{
+			card.show(getContentPane(), "DETAIL");
+		}
+		else if(e.getSource()==bDelete.b1)
+		{
+			String pwd=String.valueOf(bDelete.pf.getPassword());
+			if(pwd.length()<1)
+			{
+				bDelete.pf.requestFocus();
+				return;
+			}
+			String no=bDetail.no.getText();
+			boolean bCheck=
+				bm.boardDelete(Integer.parseInt(no), pwd);
+			if(bCheck==false)
+			{
+				JOptionPane.showMessageDialog(this, 
+						"비밀번호가 틀립니다");
+				bDelete.pf.setText("");
+				bDelete.pf.requestFocus();
+				
+			}
+			else
+			{
+				card.show(getContentPane(), "LIST");
+				listPrint();
+			}
+		}
+		// 수정 / 삭제 => 본인여부 확인 => 비밀번호 
+		// boolean => 비밀번호 체크 
+		/*
+		 *    1. 목록 => 추가 => 목록
+		 *             삭제 => 목록
+		 *    2. 상세보기 
+		 *          수정 => 상세보기
+		 *    3. 취소 => 이전화면 이동 
+		 *          history.back() 
+		 */
 	}
 	// onMouseDown
 	@Override
