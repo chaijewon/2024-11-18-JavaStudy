@@ -52,6 +52,32 @@ public class BoardManager {
 		boardSave();// 파일 변경
 	}
 	// 3. 상세보기 
+	public BoardVO boardDetailData(int no)
+	{
+		BoardVO vo=new BoardVO();
+		// 조회수 증가
+		for(BoardVO dvo:boardList)
+		{
+			if(dvo.getNo()==no)
+			{
+				dvo.setHit(dvo.getHit()+1);
+				boardSave();
+				break;
+			}
+		}
+		
+		boardGetData();
+		// 상세보기 데이터 찾기
+		for(BoardVO dvo:boardList)
+		{
+			if(dvo.getNo()==no)
+			{
+				vo=dvo;
+				break;
+			}
+		}
+		return vo;
+	}
 	// 4. 수정 / 삭제 => Update / Delete 
 	// CURD => DML 
 	// 5. 찾기 => 검색 

@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 public class BoardMainForm extends JFrame
-implements ActionListener
+implements ActionListener,MouseListener
 {
     CardLayout card=new CardLayout();
     BoardList bList=new BoardList();
@@ -39,6 +39,20 @@ implements ActionListener
     	bList.inBtn.addActionListener(this);// 글쓰기 이동버튼
     	bInsert.b1.addActionListener(this);// 글쓰기
     	bInsert.b2.addActionListener(this);// 취소 
+    	
+    	// 이전
+    	bList.prevBtn.addActionListener(this);
+    	// 다음
+    	bList.nextBtn.addActionListener(this);
+    	// table
+    	bList.table.addMouseListener(this);
+    	
+    	// 목록 
+    	bDetail.b3.addActionListener(this);
+    	// 수정 
+    	bDetail.b1.addActionListener(this);
+    	// 삭제
+    	bDetail.b2.addActionListener(this);
     }
     public void listPrint()
     {
@@ -158,6 +172,83 @@ implements ActionListener
 			listPrint();
 			
 		}
+		else if(e.getSource()==bList.prevBtn)// 이전
+		{
+			if(curpage>1)
+			{
+				curpage--;
+				listPrint();
+			}
+		}
+		else if(e.getSource()==bList.nextBtn)// 다음
+		{
+			if(curpage<totalpage)
+			{
+				curpage++;
+				listPrint();
+			}
+		}
+		// => 웹 => 반드시 현재페이지 전송 
+		else if(e.getSource()==bDetail.b3)// 상세보기 => 목록
+		{
+			card.show(getContentPane(), "LIST");
+			listPrint();
+		}
+	}
+	// onMouseDown
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==bList.table)
+		{
+			if(e.getClickCount()==2)// 더블 클릭
+			{
+				int row=bList.table.getSelectedRow();
+				String no=bList.model.getValueAt(row, 0).toString();
+				//System.out.println(no);
+				BoardVO vo=bm.boardDetailData(Integer.parseInt(no));
+				
+				card.show(getContentPane(), "DETAIL");
+				
+				// 출력 => bDetail
+				bDetail.no.setText(String.valueOf(vo.getNo()));
+				bDetail.name.setText(vo.getName());
+				bDetail.sub.setText(vo.getSubject());
+				bDetail.ta.setText(vo.getContent());
+				bDetail.hit.setText(String.valueOf(vo.getHit()));
+				bDetail.day.setText(new SimpleDateFormat("yyyy-MM-dd").format(vo.getRegdate()));
+				// 1. 웹 / 윈도우 => 거의 대부분이 String이기 때문에
+				// 정수 / 실수 변환 => String.valueOf()
+				// --------- Integer.parseInt() Double.parseDouble()
+				// 날짜 =>  SimpleDateFormat 
+				// 정수 =>  DecimalFormat => 1,000
+				
+			}
+		}
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	// onMouseUp
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	// onMouseOver
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	// onMouseOut
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
