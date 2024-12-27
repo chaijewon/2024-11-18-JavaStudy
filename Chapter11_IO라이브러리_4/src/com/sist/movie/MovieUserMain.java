@@ -2,6 +2,34 @@ package com.sist.movie;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
+/*
+ *  자바 정리 
+ *  => 2장 / 3장 / 4장
+ *      |    |     |
+ *                배열 (1차원)
+ *          연산자/제어문 
+ *     변수/데이터형  
+ *  => 5장 / 6장 / 7장 / 8장
+ *                     | 예외처리 => try,throws
+ *               | 인터페이스 
+ *          | 상속
+ *     | 객체/클래스/멤버변수/메소드
+ *  => 9장 / 10장 / 11장
+ *                 java.io
+ *                  => File / FileInputStream / FileOutputStream
+ *                     FileReader / FileWriter
+ *                     BufferedReader / BufferedWriter 
+ *                     
+ *           java.util 
+ *             => StringTokenizer / Random / Date / Calendar
+ *             => List (ArrayList) / Set(HashSet)
+ *                Map(HashMap)  
+ *     java.lang => Object / String / System / Math
+ *                  Wrapper
+ *              
+ *     
+ *     
+ */
 public class MovieUserMain {
 
 	public static void main(String[] args) {
