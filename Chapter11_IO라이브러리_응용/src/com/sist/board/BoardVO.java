@@ -1,4 +1,5 @@
 package com.sist.board;
+import java.io.Serializable;
 import java.util.*;
 
 import lombok.Data;
@@ -32,7 +33,7 @@ import lombok.Data;
  */
 // 캡슐화 / 오버라이딩 => 포함 
 @Data
-public class BoardVO {
+public class BoardVO implements Serializable{
    private int no; //게시물번호
    private String name;// 글쓴이 
    private String subject;//제목 

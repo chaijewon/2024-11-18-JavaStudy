@@ -2,6 +2,8 @@ package com.sist.main;
 import javax.swing.*;
 
 import com.sist.board.*;
+
+import java.util.Date;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
@@ -131,7 +133,8 @@ implements ActionListener
 				return;
 			}
 			
-			String pwd=String.valueOf(bInsert.pwdPf.getPassword());
+			String pwd=String.valueOf(
+					bInsert.pwdPf.getPassword());
 			// 입력된 값 읽기 
 			if(pwd.length()<1)
 			{
@@ -139,6 +142,20 @@ implements ActionListener
 				return;
 			}
 			
+			BoardVO vo=new BoardVO();
+			vo.setName(name);
+			vo.setSubject(subject);
+			vo.setContent(content);
+			vo.setPwd(pwd);
+			int no=bm.boardSequence();
+			vo.setNo(no);
+			vo.setRegdate(new Date());
+			
+			bm.boardInsert(vo); // 추가
+			
+			// 목록으로 이동 
+			card.show(getContentPane(), "LIST");
+			listPrint();
 			
 		}
 	}
