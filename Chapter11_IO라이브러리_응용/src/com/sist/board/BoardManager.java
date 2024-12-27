@@ -14,7 +14,43 @@ public class BoardManager {
 	}
 	// 기능 설정 
 	// 1. 목록출력 => 페이지 나누기 => Read SELECT
+	public List<BoardVO> boardListData(int page)
+	{
+		List<BoardVO> list=
+				new ArrayList<BoardVO>();
+		int j=0; // 10개씩 나눠주는 변수 
+		int pagecnt=(page*10)-10;
+		// 시작 위치 
+		/*
+		 *   1page => 0~9
+		 *   2page => 10~19
+		 *   ...
+		 *   WHERE rownum BETWEEN 1 AND 10 
+		 */
+		List<BoardVO> temp=new ArrayList<BoardVO>();
+		// 최신순으로 출력 
+		for(int i=boardList.size()-1;i>=0;i--)
+		{
+			temp.add(boardList.get(i));
+		}
+		// 페이지별 출력
+		for(int i=0;i<temp.size();i++)
+		{
+			if(j<10 && i>=pagecnt)
+			{
+				BoardVO vo=temp.get(i);
+				list.add(vo);
+				j++;
+			}
+		}
+		return list;
+	}
 	// 2. 추가    => Create INSERT
+	public void boardInsert(BoardVO vo)
+	{
+		boardList.add(vo);
+		boardSave();// 파일 변경
+	}
 	// 3. 상세보기 
 	// 4. 수정 / 삭제 => Update / Delete 
 	// CURD => DML 

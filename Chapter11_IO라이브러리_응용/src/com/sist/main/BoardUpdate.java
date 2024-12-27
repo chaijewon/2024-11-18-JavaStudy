@@ -2,19 +2,25 @@ package com.sist.main;
 import java.awt.Font;
 
 import javax.swing.*;
-public class BoardInsert extends JPanel{
-    JLabel titleLa,nameLa,subLa,contLa,pwdLa;
+public class BoardUpdate extends JPanel{
+    JLabel titleLa,nameLa,subLa,contLa,pwdLa,noLa;
     JTextField nameTf,subTf;
     JPasswordField pwdPf;
     JTextArea ta;
     JButton b1,b2;
-    public BoardInsert()
+    public BoardUpdate()
     {
-    	titleLa=new JLabel("글쓰기",JLabel.CENTER);// <table>
+    	titleLa=new JLabel("수정하기",JLabel.CENTER);// <table>
     	titleLa.setFont(new Font("맑은 고딕",Font.BOLD,30)); //<h3></h3>
     	setLayout(null);
     	titleLa.setBounds(10, 15, 620, 50);
     	add(titleLa);
+    	
+    	noLa=new JLabel();
+    	noLa.setBounds(150, 70, 20, 30);
+    	add(noLa);
+    	noLa.setVisible(false);
+    	// <input type=hidden>
     	
     	nameLa=new JLabel("이름",JLabel.CENTER);
     	nameTf=new JTextField();
@@ -44,7 +50,7 @@ public class BoardInsert extends JPanel{
     	pwdPf.setBounds(95, 395, 150, 30);
     	add(pwdLa);add(pwdPf);
     	
-    	b1=new JButton("글쓰기");
+    	b1=new JButton("수정");
     	b2=new JButton("취소");
     	
     	JPanel p=new JPanel();
