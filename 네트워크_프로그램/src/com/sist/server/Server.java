@@ -48,6 +48,7 @@ public class Server implements Runnable{
 				Client client=
 						  new Client(s);
 				// s=>port (윈도우마다 틀리다)
+				waitVc.add(client);
 				// => 통신을 시작해라 명령
 				client.start(); // run()호출 
 			}
