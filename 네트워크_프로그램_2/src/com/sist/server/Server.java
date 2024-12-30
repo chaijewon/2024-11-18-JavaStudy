@@ -177,6 +177,54 @@ public class Server implements Runnable{
 	  					   messageAll(Function.WAITCHAT+"|["+name+"] "+st.nextToken());
 	  				   }
 	  				   break;
+	  				   case Function.EXIT:
+	  				   {
+	  					   messageAll(Function.EXIT+"|"+id);
+	  					   messageAll(Function.WAITCHAT+"|[알림]"+name
+	  							   +"님 퇴장하셨습니다");
+	  					   messageTo(Function.MYEXIT+"|");
+	  					   // 행위를 한 사람 => this
+	  					   for(int i=0;i<waitVc.size();i++)
+	  					   {
+	  						   Client c=waitVc.get(i);
+	  						   if(c.id.equals(id))
+	  						   {
+	  							   waitVc.remove(i);
+	  							   try
+	  							   {
+	  								   in.close();
+	  								   out.close();
+	  							   }catch(Exception ex) {}
+	  							   break;
+	  						   }
+	  					   }
+	  				   }
+	  				   break;
+	  				   /*
+	  				    *   서버의 기능 
+	  				    *   1. 저장 
+	  				    *   2. 수정 
+	  				    *   3. 읽기 / 쓰기 (송수신)
+	  				    *   4. 검색 
+	  				    */
+	  				   case Function.INFO:
+	  				   {
+	  					   String yid=st.nextToken();
+	  					   for(Client c:waitVc)
+	  					   {
+	  						   if(yid.equals(c.id))
+	  						   {
+	  							   // 오라클에서 데이터 읽기 
+	  							   messageTo(Function.INFO+"|"
+	  									  +c.id+"|"
+	  									  +c.name+"|"
+	  									  +c.sex+"|"
+	  									  +c.pos);
+	  							   break;
+	  						   }
+	  					   }
+	  				   }
+	  				   break;
 	  				}
 	  			}
 	  		}catch(Exception ex) {}

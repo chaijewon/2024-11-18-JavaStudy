@@ -25,7 +25,28 @@ public class WaitRoom extends JPanel{
     	
     	String[] col2={"아이디","이름","성별","위치"};
     	String[][] row2=new String[0][4];
-    	model2=new DefaultTableModel(row2,col2);
+    	model2=new DefaultTableModel(row2,col2)
+    	{
+            // 익명의 클래스 => 상속없이 오버라이딩이 가능 
+    		/*
+    		 *   내부 클래스 
+    		 *   ---------
+    		 *   1. 멤버클래스 => 서버 
+    		 *      class A
+    		 *      {
+    		 *         class B
+    		 *         {
+    		 *         }
+    		 *      }
+    		 *   2. 익명의 클래스:오버라이딩  
+    		 */
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+    		
+    	};
     	table2=new JTable(model2);
     	JScrollPane js2=new JScrollPane(table2);
     	
