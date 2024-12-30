@@ -82,8 +82,8 @@ implements ActionListener,Runnable
 			try
 			{
 				// 전화 => 서버 연결 
-				//s=new Socket("localhost",3355);
-				s=new Socket("192.168.10.101",3355);
+				s=new Socket("localhost",3355);
+				//s=new Socket("192.168.10.101",3355);
 				// 송수신 
 				out=s.getOutputStream();
 				in=new BufferedReader(
