@@ -33,6 +33,7 @@ implements ActionListener,Runnable
     	login.b1.addActionListener(this);
     	login.b2.addActionListener(this);
     	
+    	wr.tf.addActionListener(this);
     	
     }
 	public static void main(String[] args) {
@@ -74,7 +75,8 @@ implements ActionListener,Runnable
 				  break;
 				  case Function.WAITCHAT:
 				  {
-					  wr.ta.append(st.nextToken()+"\n");  
+					  wr.ta.append(st.nextToken()+"\n");
+					  wr.bar.setValue(wr.bar.getMaximum());
 				  }
 				  break;
 				}
@@ -125,6 +127,24 @@ implements ActionListener,Runnable
 			
 			// 서버와 연결
 			connection(id, name, sex);
+		}
+		else if(e.getSource()==wr.tf)
+		{
+			String msg=wr.tf.getText();
+			if(msg.trim().length()<1)
+			{
+				wr.tf.requestFocus();
+				return;
+			}
+			
+			// 서버로 전송 
+			try
+			{
+				out.write((Function.WAITCHAT+"|"
+						  +msg+"\n").getBytes());
+			}catch(Exception ex) {}
+			
+			wr.tf.setText("");
 		}
 	}
 	public void connection(String id,String name,String sex)

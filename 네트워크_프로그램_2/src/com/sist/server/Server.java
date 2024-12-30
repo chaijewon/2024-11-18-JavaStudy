@@ -172,6 +172,11 @@ public class Server implements Runnable{
 	  					  }
 	  				   }
 	  				   break;
+	  				   case Function.WAITCHAT:
+	  				   {
+	  					   messageAll(Function.WAITCHAT+"|["+name+"] "+st.nextToken());
+	  				   }
+	  				   break;
 	  				}
 	  			}
 	  		}catch(Exception ex) {}

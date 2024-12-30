@@ -9,7 +9,7 @@ public class WaitRoom extends JPanel{
     JTextArea ta;
     JTextField tf;
     JButton b1,b2,b3,b4,b5,b6;
-    
+    JScrollBar bar;
     public WaitRoom()
     {
     	setLayout(null);
@@ -35,6 +35,7 @@ public class WaitRoom extends JPanel{
     	ta=new JTextArea();
     	JScrollPane js3=new JScrollPane(ta);
     	ta.setEditable(false);
+    	bar=js3.getVerticalScrollBar();
     	
     	js3.setBounds(465, 15, 300, 260);
     	add(js3);
