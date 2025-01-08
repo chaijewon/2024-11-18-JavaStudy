@@ -8,7 +8,7 @@ import java.awt.event.*;
 import java.util.List;
 import com.sist.vo.*;
 public class UserMain extends JFrame
-implements MouseListener
+implements MouseListener,ActionListener
 {
     CardLayout card=new CardLayout();
     JMenuItem empItem=new JMenuItem("사원관리");
@@ -19,6 +19,7 @@ implements MouseListener
     
     // 화면을 모아서 관리 
     EmpListPanel ep=new EmpListPanel();
+    EmpFindPanel efp=new EmpFindPanel();
     public UserMain()
     {
     	setLayout(card);
@@ -39,6 +40,7 @@ implements MouseListener
     	
     	setJMenuBar(bar);
     	
+    	add("EFP",efp);
     	add("EP",ep);
     	
     	
@@ -49,6 +51,14 @@ implements MouseListener
     	setDefaultCloseOperation(EXIT_ON_CLOSE);
     	
     	ep.table.addMouseListener(this);
+    	
+    	// 메뉴 
+    	empItem.addActionListener(this);
+    	eFindItem.addActionListener(this);
+    	exit.addActionListener(this);
+    	
+    	efp.b.addActionListener(this);// 검색버튼 
+    	efp.tf.addActionListener(this);// 엔터
     }
     public void empDataPrint()
     {
@@ -68,6 +78,28 @@ implements MouseListener
     		ep.model.addRow(data);
     	}
     }
+    public void empFindPrint(String col,String fd)
+    {
+    	for(int i=efp.model.getRowCount()-1;i>=0;i--)
+    	{
+    		efp.model.removeRow(i);
+    	}
+    	// 오라클 연결 
+    	EmpDAO dao=EmpDAO.newInstance();
+    	List<EmpVO> list=dao.empFindData(col, fd);
+    	for(EmpVO vo:list)
+    	{
+    		String[] data= {
+    			String.valueOf(vo.getEmpno()),
+    			vo.getEname(),
+    			vo.getJob(),
+    			vo.getHiredate().toString(),
+    			vo.getDvo().getDname(),
+    			vo.getDvo().getLoc()
+    		};
+    		efp.model.addRow(data);
+    	}
+    }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
         new UserMain();
@@ -81,6 +113,7 @@ implements MouseListener
 			{
 				// 사번 
 				int row=ep.table.getSelectedRow();
+				//if(row==0) return;
 				String empno=
 						ep.model.getValueAt(row, 0).toString();
 				//OptionPane.showMessageDialog(this, empno);
@@ -120,6 +153,39 @@ implements MouseListener
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==exit)
+		{
+			System.exit(0);
+		}
+		else if(e.getSource()==empItem)
+		{
+			card.show(getContentPane(), "EP");
+			//화면 변경  => 사원 목록
+			//<a href="list.jsp">
+		}
+		else if(e.getSource()==eFindItem)
+		{
+			card.show(getContentPane(), "EFP");
+			// 화면 변경 => 사원 검색 
+			//<a href="find.jsp">
+		}
+		else if(e.getSource()==efp.b ||
+			e.getSource()==efp.tf)
+		{
+			String col=efp.box.getSelectedItem().toString();
+			String fd=efp.tf.getText();
+			if(fd.trim().length()<1)
+			{
+				efp.tf.requestFocus();
+				return;
+			}
+			
+			empFindPrint(col, fd.toUpperCase());
+		}
 	}
 
 }
