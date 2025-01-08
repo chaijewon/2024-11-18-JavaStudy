@@ -34,7 +34,7 @@ import java.util.*;
 // => 테이블연동 : 다른 테이블의 컬럼을 추가하면 안된다 
 public class EmpVO {
     private int empno,mgr,sal,comm,deptno;
-    private String ename,job;
+    private String ename,job,mname;
     private Date hiredate;
     private String strSal;
     // TO_CHAR => 문자열 => String 
@@ -45,6 +45,12 @@ public class EmpVO {
     
     public String getStrSal() {
 		return strSal;
+	}
+	public String getMname() {
+		return mname;
+	}
+	public void setMname(String mname) {
+		this.mname = mname;
 	}
 	public void setStrSal(String strSal) {
 		this.strSal = strSal;

@@ -69,6 +69,47 @@ public class EmpDAO {
 	   }
 	   return list;
    }
-   // 상세보기 
+   // 상세보기 => EmpVO (사원 한명에 대한 모든 정보를 저장)
+   // ------ 무조건 중복이 없는 데이터를 전송 
+   // 게시물번호 / 사번 / 영화번호 ...
+   // 문자열 => ID => 회원가입 (아이디중복 / 우편번호) 
+   public EmpVO empDetailData(int empno)
+   {
+	   EmpVO vo=new EmpVO();
+	   try
+	   {
+		   conn=db.getConnection();
+		   String sql="SELECT e1.empno,e1.ename,e1.job,e2.ename,e1.hiredate,"
+				     +"e1.sal,e1.comm,dname,loc,grade "
+				     +"FROM emp e1,emp e2,dept d,salgrade s "
+				     +"WHERE e1.mgr=e2.empno "
+				     +"AND e1.deptno=d.deptno "
+				     +"AND e1.sal BETWEEN losal AND hisal "
+				     +"AND e1.empno="+empno;
+		   ps=conn.prepareStatement(sql);
+		   ResultSet rs=ps.executeQuery();
+		   rs.next();
+		   vo.setEmpno(rs.getInt(1));
+		   vo.setEname(rs.getString(2));
+		   vo.setJob(rs.getString(3));
+		   vo.setMname(rs.getString(4));
+		   vo.setHiredate(rs.getDate(5));
+		   vo.setSal(rs.getInt(6));
+		   vo.setComm(rs.getInt(7));
+		   vo.getDvo().setDname(rs.getString(8));
+		   vo.getDvo().setLoc(rs.getString(9));
+		   vo.getSvo().setGrade(rs.getInt(10));
+		   rs.close();
+		   
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   db.disConnection(conn, ps);
+	   }
+	   return vo;
+   }
    // 검색 
 }

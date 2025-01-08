@@ -7,7 +7,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 import com.sist.vo.*;
-public class UserMain extends JFrame{
+public class UserMain extends JFrame
+implements MouseListener
+{
     CardLayout card=new CardLayout();
     JMenuItem empItem=new JMenuItem("사원관리");
     JMenuItem foodItem=new JMenuItem("맛집관리");
@@ -46,6 +48,7 @@ public class UserMain extends JFrame{
     	setVisible(true);
     	setDefaultCloseOperation(EXIT_ON_CLOSE);
     	
+    	ep.table.addMouseListener(this);
     }
     public void empDataPrint()
     {
@@ -68,6 +71,55 @@ public class UserMain extends JFrame{
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
         new UserMain();
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==ep.table)
+		{
+			if(e.getClickCount()==2)// 더블 클릭 
+			{
+				// 사번 
+				int row=ep.table.getSelectedRow();
+				String empno=
+						ep.model.getValueAt(row, 0).toString();
+				//OptionPane.showMessageDialog(this, empno);
+				EmpDAO dao=EmpDAO.newInstance();
+				EmpVO vo=dao.empDetailData(Integer.parseInt(empno));
+				String info="사번:"+vo.getEmpno()+"\n"
+						   +"이름:"+vo.getEname()+"\n"
+						   +"직위:"+vo.getJob()+"\n"
+						   +"사수명:"+vo.getMname()+"\n"
+						   +"입사일:"+vo.getHiredate().toString()+"\n"
+						   +"급여:"+vo.getSal()+"\n"
+						   +"성과급:"+vo.getComm()+"\n"
+						   +"부서명:"+vo.getDvo().getDname()+"\n"
+						   +"근무지:"+vo.getDvo().getLoc()+"\n"
+						   +"호봉:"+vo.getSvo().getGrade();
+				JOptionPane.showMessageDialog(this, info);
+				
+			}
+		}
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
