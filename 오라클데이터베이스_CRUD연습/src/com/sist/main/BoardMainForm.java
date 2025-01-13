@@ -109,6 +109,96 @@ implements ActionListener,MouseListener
 				listPrint();
 			}
 		}
+		// 새글 추가 창 
+		else if(e.getSource()==bList.inBtn)
+		{
+			card.show(getContentPane(), "INSERT");
+			bInsert.nameTf.setText("");
+			bInsert.subTf.setText("");
+			bInsert.ta.setText("");
+			bInsert.pwdPf.setText("");
+			bInsert.nameTf.requestFocus();
+			// card => 단점은 윈도우가 종료하지 않는다 
+			// => 입력된 내용을 그대로 유지
+		}
+		// 글쓰기 등록
+		else if(e.getSource()==bInsert.b1)
+		{
+			// 입력한 데이터 읽기 
+			// 유효성 검사 => NOT NULL 속성을 가지고 있는 경우
+			// 웹 => 자바스크립트 
+			String name=bInsert.nameTf.getText();
+			if(name.trim().length()<1)
+			{
+				// 이름이 입력이 안된 상태 
+				JOptionPane.showMessageDialog(this, 
+						"이름을 입력하세요");
+				// alert()
+				bInsert.nameTf.requestFocus();
+				// name.focus()
+				return;
+			}
+			
+			String subject=bInsert.subTf.getText();
+			if(subject.trim().length()<1)
+			{
+				// 이름이 입력이 안된 상태 
+				JOptionPane.showMessageDialog(this, 
+						"제목을 입력하세요");
+				// alert()
+				bInsert.subTf.requestFocus();
+				// name.focus()
+				return;
+			}
+			
+			String content=bInsert.ta.getText();
+			if(content.trim().length()<1)
+			{
+				// 이름이 입력이 안된 상태 
+				JOptionPane.showMessageDialog(this, 
+						"내용을 입력하세요");
+				// alert()
+				bInsert.ta.requestFocus();
+				// name.focus()
+				return;
+			}
+			
+			String pwd=String.valueOf(bInsert.pwdPf.getPassword());
+			if(pwd.trim().length()<1)
+			{
+				// 이름이 입력이 안된 상태 
+				JOptionPane.showMessageDialog(this, 
+						"비밀번호를 입력하세요");
+				// alert()
+				bInsert.pwdPf.requestFocus();
+				// name.focus()
+				return;
+			}
+			
+			// => 유효성 : NOT NULL / CHECK / PRIMARY KEY(id)
+			
+			// 오라클 연동 
+			FreeBoardDAO dao=FreeBoardDAO.newInstance();
+			FreeBoardVO vo=new FreeBoardVO();
+			vo.setName(name);
+			vo.setSubject(subject);
+			vo.setContent(content);
+			vo.setPwd(pwd);
+			
+			dao.boardInsert(vo);
+			
+			card.show(getContentPane(), "LIST");
+			listPrint();
+			
+		}
+		// 글쓰기 취소
+		else if(e.getSource()==bInsert.b2)
+		{
+			// javascript:history.back()
+			card.show(getContentPane(), "LIST");
+			// 화면 이동 getContentPane():Panel관리자 
+			// => 이동시에 card이름 부여 
+		}
 	}
 	// onMouseDown
 	@Override
