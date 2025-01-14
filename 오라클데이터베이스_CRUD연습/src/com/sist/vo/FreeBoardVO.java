@@ -1,5 +1,18 @@
 package com.sist.vo;
 import java.util.*;
+/*
+ *    오라클     자바 
+ *     컬럼명     멤버변수명 
+ *     -----------------
+ *     데이터형 
+ *     CHAR
+ *     VARCHAR2
+ *     CLOB       String
+ *     NUMBER     int / double  => 저장값 
+ *     DATE       java.util.Date 
+ *     BFILE/BLOB java.io.InputStream => 사용빈도가 거의 없다 
+ *     => 이미지 => URL
+ */
 public class FreeBoardVO {
     private int no,hit;
     private String name,subject,content,pwd;
