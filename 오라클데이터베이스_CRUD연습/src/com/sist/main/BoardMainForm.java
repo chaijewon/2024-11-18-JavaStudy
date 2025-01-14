@@ -87,6 +87,19 @@ implements ActionListener,MouseListener
     	totalpage=dao.boardTotalPage();
     	bList.pageLa.setText(curpage+" page / "+totalpage+" pages");
     }
+    public void detailPrint(int no)
+    {
+    	FreeBoardDAO dao=
+				FreeBoardDAO.newInstance();
+		FreeBoardVO vo=
+		 dao.boardDetailData(no);
+    	bDetail.no.setText(String.valueOf(vo.getNo()));
+    	bDetail.name.setText(vo.getName());
+    	bDetail.day.setText(vo.getRegdate().toString());
+    	bDetail.hit.setText(String.valueOf(vo.getHit()));
+    	bDetail.sub.setText(vo.getSubject());
+    	bDetail.ta.setText(vo.getContent());
+    }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try
@@ -203,12 +216,68 @@ implements ActionListener,MouseListener
 			// 화면 이동 getContentPane():Panel관리자 
 			// => 이동시에 card이름 부여 
 		}
+		// 상세보기 => 목록 이동 
+		else if(e.getSource()==bDetail.b3)
+		{
+			card.show(getContentPane(), "LIST");
+			listPrint();
+		}
+		// 상세보기 => 수정 이동  
+		else if(e.getSource()==bDetail.b1)
+		{
+			
+		}
+		// 상세보기 => 삭제 이동  
+		else if(e.getSource()==bDetail.b2)
+		{
+			card.show(getContentPane(), "DELETE");
+			bDelete.pf.setText("");
+			bDelete.pf.requestFocus();
+		}
+		// 실제 삭제 
+		else if(e.getSource()==bDelete.b1)
+		{
+			String no=bDetail.no.getText();
+			String pwd=String.valueOf(
+					bDelete.pf.getPassword());
+			FreeBoardDAO dao=FreeBoardDAO.newInstance();
+			boolean bCheck=
+				dao.boardDelete(Integer.parseInt(no), pwd);
+			if(bCheck==true)
+			{
+				card.show(getContentPane(), "LIST");
+				listPrint();
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(this, 
+						"비밀번호가 틀립니다");
+				bDelete.pf.setText("");
+				bDelete.pf.requestFocus();
+				
+			}
+		}
+		else if(e.getSource()==bDelete.b2)
+		{
+			card.show(getContentPane(), "DETAIL");
+		}
 	}
 	// onMouseDown
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		if(e.getSource()==bList.table)
+		{
+			if(e.getClickCount()==2)// 더블 클릭시 
+			{
+				int row=bList.table.getSelectedRow();
+				String no=bList.model.getValueAt(row, 0).toString();
+				// 게시물 번호를 읽어온다 
+				card.show(getContentPane(), "DETAIL");
+				detailPrint(Integer.parseInt(no));
+				
+			}
+		}
 	}
 	
 	@Override
