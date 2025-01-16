@@ -24,7 +24,16 @@ public class ChatPenal extends JPanel{
     	
     	String[] col={"아이디","이름","성별"};
     	String[][] row=new String[0][3];
-    	model=new DefaultTableModel(row,col);
+    	model=new DefaultTableModel(row,col)
+    	{
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+    		
+    	};
     	table=new JTable(model);
     	JScrollPane js1=new JScrollPane(table);
     	
