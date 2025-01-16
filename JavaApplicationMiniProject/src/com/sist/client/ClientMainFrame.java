@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import com.sist.vo.*;
+import com.sist.commons.Function;
 import com.sist.dao.*;
 ///////////////// 네트워크 통신 
 import java.io.*;
@@ -58,7 +59,38 @@ implements ActionListener,Runnable
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+		try
+		{
+			while(true)
+			{
+				String msg=in.readLine();
+				// 서버에서 보낸값을 받는다 
+				StringTokenizer st=
+						new StringTokenizer(msg,"|");
+				int protocol=Integer.parseInt(st.nextToken());
+				switch(protocol)
+				{
+				  case Function.LOGIN:
+				  {
+					  
+				  }
+				  break;
+				  case Function.MYLOG:
+				  {
+					  String id=st.nextToken();
+					  setTitle(id);
+					  login.setVisible(false);
+					  setVisible(true);
+				  }
+				  break;
+				  case Function.WAITCHAT:
+				  {
+					  
+				  }
+				  break;
+				}
+			}
+		}catch(Exception ex) {}
 	}
 	// 서버에 요청 => 로그인 / 채팅 보내기 
 	@Override
@@ -107,11 +139,31 @@ implements ActionListener,Runnable
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(this, 
-						"로그인되었습니다\n서버로 연결합니다");
-				login.setVisible(false);
-				setVisible(true);
+				// 서버연결 
+				connection(vo);
 			}
 		}
+	}
+	public void connection(MemberVO vo)
+	{
+		try
+		{
+			s=new Socket("localhost",3355);
+			// 서버 연결 => s는 서버
+			// 서버로 전송 
+			out=s.getOutputStream();
+			// 서버에서 값 받기 
+			in=new BufferedReader(
+				new InputStreamReader(s.getInputStream()));
+			
+			// 서버로 로그인 요청 
+			out.write((Function.LOGIN+"|"
+			        +vo.getId()+"|"
+					+vo.getName()+"|"
+					+vo.getSex()+"\n").getBytes());
+			// => 반드시 => \n을 전송해야 된다 
+		}catch(Exception ex) {}
+		// 서버로부터 값을 받아서 출력 
+		new Thread(this).start(); // run()메소드 호출 
 	}
 }

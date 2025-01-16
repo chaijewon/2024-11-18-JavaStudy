@@ -1,5 +1,8 @@
 package com.sist.server;
 import java.util.*;
+
+import com.sist.commons.Function;
+
 import java.net.*;
 import java.io.*;
 /*
@@ -116,7 +119,50 @@ public class Server implements Runnable{
 		// 통신 => Thread로 처리  start() => run() 호출 
 		public void run()
 		{
-			
+			try
+			{
+				while(true)
+				{
+					// 사용자 전송한 메세지를 받는다 
+					String msg=in.readLine();
+					System.out.println("Client=>"+msg);
+					// 100|hong|홍길동|남자
+					StringTokenizer st=new StringTokenizer(msg,"|");
+					int protocol=Integer.parseInt(st.nextToken());
+					switch(protocol)
+					{
+					  // 로그인 요청시 처리 
+					  case Function.LOGIN:
+					  {
+						  id=st.nextToken();
+						  name=st.nextToken();
+						  sex=st.nextToken();
+						  
+						  // 1. 전체적으로 로그인 정보 전송 
+						  messageAll(Function.LOGIN+"|"
+								  +id+"|"+name+"|"+sex);
+						  // 2. 입장메세지 전송 
+						  messageAll(Function.WAITCHAT+"|[알림]"
+								  +name+"님이 입장하셨습니다");
+						  // 3. waitVc에 저장 
+						  waitVc.add(this);
+						  // => 메인화면으로 이동 
+						  messageTo(Function.MYLOG+"|"
+								  +id);
+						  // 4. 먼저 접속한 사람의 정보 전체를 보낸다 
+						  for(Client client:waitVc)
+						  {
+							  messageTo(Function.LOGIN+"|"
+									+client.id+"|"
+									+client.name+"|"
+									+client.sex);
+						  }
+						  // 5. 방정보 전송 
+					  }
+					  break;
+					}
+				}
+			}catch(Exception ex) {}
 		}
 		// => 개인별로 전송 
 		// synchronized => 동기화
