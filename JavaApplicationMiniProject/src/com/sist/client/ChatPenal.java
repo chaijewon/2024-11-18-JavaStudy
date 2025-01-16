@@ -31,5 +31,21 @@ public class ChatPenal extends JPanel{
     	// 배치 
     	setLayout(null);
     	
+    	js.setBounds(100, 20, 400, 450);
+    	add(js);
+    	
+    	tf.setBounds(100, 475, 400, 30);
+    	add(tf);
+    	
+    	js1.setBounds(510, 20, 280, 300);
+    	add(js1);
+    	
+    	JPanel p=new JPanel();
+    	p.add(b1);p.add(b2);
+    	
+    	p.setBounds(510, 330, 280, 35);
+    	add(p);
+    	
+    	
     }
 }

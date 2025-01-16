@@ -47,6 +47,9 @@ implements ActionListener,Runnable
 		login.b1.addActionListener(this);
 		login.b2.addActionListener(this);
 		
+		
+		mf.b6.addActionListener(this);
+		mf.b1.addActionListener(this);
 	}
 	public static void main(String[] args) {
 		try
@@ -72,7 +75,12 @@ implements ActionListener,Runnable
 				{
 				  case Function.LOGIN:
 				  {
-					  
+					  String[] data= {
+						st.nextToken(),
+						st.nextToken(),
+						st.nextToken()
+					  };
+					  cp.cp.model.addRow(data);
 				  }
 				  break;
 				  case Function.MYLOG:
@@ -85,7 +93,7 @@ implements ActionListener,Runnable
 				  break;
 				  case Function.WAITCHAT:
 				  {
-					  
+					  cp.cp.ta.append(st.nextToken()+"\n");
 				  }
 				  break;
 				}
@@ -139,9 +147,17 @@ implements ActionListener,Runnable
 			}
 			else
 			{
-				// 서버연결 
+				// 서버연결 park
 				connection(vo);
 			}
+		}
+		else if(e.getSource()==mf.b6)
+		{
+			cp.card.show(cp, "CHAT");
+		}
+		else if(e.getSource()==mf.b1)
+		{
+			cp.card.show(cp, "HOME");
 		}
 	}
 	public void connection(MemberVO vo)
