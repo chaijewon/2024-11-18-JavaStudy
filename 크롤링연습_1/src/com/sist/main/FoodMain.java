@@ -13,6 +13,7 @@ public class FoodMain {
 		// TODO Auto-generated method stub
         try
         {
+        	FoodDAO dao=FoodDAO.newInstance();
         	for(int i=1;i<=347;i++)
         	{
         		Document doc=
@@ -21,6 +22,8 @@ public class FoodMain {
         		System.out.println("======"+i+"page=====");
         		for(int j=0;j<link.size();j++)
         		{
+        		  try
+        		  {
         		   System.out.println(link.get(j).attr("href"));
         		   String url="https://www.menupan.com"+link.get(j).attr("href");
         		   Document doc2=Jsoup.connect(url).get();
@@ -77,9 +80,27 @@ public class FoodMain {
         		   images=images.substring(0,images.lastIndexOf(","));
         		   //Elements image=doc2.select("div#id_restphoto_slides ul#id_restphoto_list_ul img");
         		   System.out.println(images);
+        		   
+        		   // 데이터베이스 추가 
+        		   FoodVO vo=new FoodVO();
+        		   vo.setName(strName.trim());
+        		   vo.setType(type.text());
+        		   vo.setPhone(phone.text());
+        		   vo.setAddress(address.text());
+        		   vo.setScore(Double.parseDouble(score.text()));
+        		   vo.setParking(parking.text());
+        		   vo.setPoster(poster.attr("src"));
+        		   vo.setImages(images);
+        		   vo.setTime(time.text());
+        		   vo.setContent(content.text());
+        		   vo.setTheme(theme.text());
+        		   vo.setPrice(price.text());
+        		   dao.foodInsert(vo);
+        		  }catch(Exception ex){}
         		}
         		System.out.println("========================");
         	}
+        	System.out.println("데이터 저장 완료!!");
         }catch(Exception ex){}
 	}
 
