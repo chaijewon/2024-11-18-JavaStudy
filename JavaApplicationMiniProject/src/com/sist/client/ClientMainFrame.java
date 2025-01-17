@@ -19,8 +19,11 @@ import java.net.*;
  *                   ----------- 쓰레드  
  *   
  */
+// 상세보기 , 쪽지보내기 , 정보보기 
+// 묻고 답하기 , 뉴스  
+// 찜하기 , 좋아요 => 마이페이지 
 public class ClientMainFrame extends JFrame
-implements ActionListener,Runnable
+implements ActionListener,Runnable,MouseListener
 {
 	/// 네트워크 통신 
 	Socket s;
@@ -56,6 +59,7 @@ implements ActionListener,Runnable
 		
 		// Chat => Socket 
 		cp.cp.tf.addActionListener(this);
+		cp.cp.table.addMouseListener(this);
 		
 		addWindowListener(new WindowAdapter() {
 
@@ -246,5 +250,45 @@ implements ActionListener,Runnable
 		}catch(Exception ex) {}
 		// 서버로부터 값을 받아서 출력 
 		new Thread(this).start(); // run()메소드 호출 
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==cp.cp.table)
+		{
+			int selectRow=cp.cp.table.getSelectedRow();
+			String myId=getTitle();
+			String id=cp.cp.model.getValueAt(selectRow, 0).toString();
+			if(myId.equals(id))
+			{
+				cp.cp.b1.setEnabled(false);
+				cp.cp.b2.setEnabled(false);
+			}
+			else
+			{
+				cp.cp.b1.setEnabled(true);
+				cp.cp.b2.setEnabled(true);
+			}
+		}
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
