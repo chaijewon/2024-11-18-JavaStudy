@@ -53,6 +53,9 @@ implements ActionListener,Runnable
 		mf.b1.addActionListener(this); // 홈 
 		mf.b2.addActionListener(this); // 맛집
 		mf.b3.addActionListener(this); // 검색
+		
+		// Chat => Socket 
+		cp.cp.tf.addActionListener(this);
 	}
 	public static void main(String[] args) {
 		try
@@ -153,6 +156,24 @@ implements ActionListener,Runnable
 				// 서버연결 park
 				connection(vo);
 			}
+		}
+		// chat처리 
+		else if(e.getSource()==cp.cp.tf)
+		{
+			String msg=cp.cp.tf.getText();
+			if(msg.trim().length()<1)
+			{
+				cp.cp.tf.requestFocus();
+				return;
+			}
+			
+			try
+			{
+			  out.write((Function.WAITCHAT+"|"
+					  +msg+"\n").getBytes());	
+			}catch(Exception ex){}
+			
+			cp.cp.tf.setText("");
 		}
 		else if(e.getSource()==mf.b6)
 		{

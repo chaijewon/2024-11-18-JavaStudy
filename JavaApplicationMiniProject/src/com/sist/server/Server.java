@@ -160,6 +160,12 @@ public class Server implements Runnable{
 						  // 5. 방정보 전송 
 					  }
 					  break;
+					  case Function.WAITCHAT:
+					  {
+						  messageAll(Function.WAITCHAT+"|["
+								  +name+"] "+st.nextToken());
+					  }
+					  break;
 					}
 				}
 			}catch(Exception ex) {}
