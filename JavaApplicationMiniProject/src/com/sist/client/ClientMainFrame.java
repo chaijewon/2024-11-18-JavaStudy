@@ -48,8 +48,11 @@ implements ActionListener,Runnable
 		login.b2.addActionListener(this);
 		
 		
-		mf.b6.addActionListener(this);
-		mf.b1.addActionListener(this);
+		// Menu Botton
+		mf.b6.addActionListener(this); // 채팅 
+		mf.b1.addActionListener(this); // 홈 
+		mf.b2.addActionListener(this); // 맛집
+		mf.b3.addActionListener(this); // 검색
 	}
 	public static void main(String[] args) {
 		try
@@ -158,6 +161,14 @@ implements ActionListener,Runnable
 		else if(e.getSource()==mf.b1)
 		{
 			cp.card.show(cp, "HOME");
+		}
+		else if(e.getSource()==mf.b2)
+		{
+			cp.card.show(cp, "FOOD");
+		}
+		else if(e.getSource()==mf.b3)
+		{
+			cp.card.show(cp, "FIND");
 		}
 	}
 	public void connection(MemberVO vo)

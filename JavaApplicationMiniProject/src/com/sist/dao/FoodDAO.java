@@ -156,4 +156,98 @@ public class FoodDAO {
 		   return list;
 	   }
 	   // 2. 상세보기 => 조회수 증가 / WHERE
+	   // => 홈 / 맛집 / 맛집검색 => 상세보기 
+	   // 3. 장르별 출력 
+	   // => 웹 (장르별,이름...) : 지도출력 (주소) => 카카오
+	   // JEditPane : HTML출력 
+	   // JDBC연동 
+	   // => DAO / VO
+	   // FoodVO => 맛집 한개에 대한 정보 
+	   // 맛집이 많은 경우 => [] , List
+	   // 리턴형 / 매개변수 
+	   /*
+	    *   SELECT => 데이터 검색 
+	    *   INSERT / UPDATE / DELETE 
+	    *   ------------------------- 게시판 
+	    *   ------------------------- 답변형 게시판 
+	    *   댓글 / 장바구니 / 예약 / 결제 => DML사용 
+	    */
+	   public List<FoodVO> foodGenreData(int page,String genre)
+	   {
+		   List<FoodVO> list=
+				   new ArrayList<FoodVO>();
+		   // 5장 => 1. PL/SQL , 2. JDBC 
+		   // 6장 - 7장 : 데이터베이스 설계(정규화)
+		   // 8장 : 트랜잭션  9장 ~ 어드민 
+		   try
+		   {
+			   // 1. 연결 
+			   getConnection();
+			   String sql="SELECT fno,name,poster,num "
+					     +"FROM (SELECT fno,name,poster,rownum as num "
+					     +"FROM (SELECT /*+ INDEX_ASC(food_menupan fm_fno_pk)*/fno,name,poster "
+					     +"FROM food_menupan WHERE type LIKE '%'||?||'%')) "
+					     +"WHERE num BETWEEN ? AND ?";
+			   ps=conn.prepareStatement(sql);
+			   // ?에 값을 채운다 
+			   ps.setString(1, genre);
+			   int rowSize=12;
+			   int start=(rowSize*page)-(rowSize-1);
+			   // rownum은 1번부터 시작 
+			   int end=rowSize*page;
+			   
+			   ps.setInt(2, start);
+			   ps.setInt(3, end);
+			   
+			   // 결과값 받기 
+			   ResultSet rs=ps.executeQuery();
+			   while(rs.next())
+			   {
+				   FoodVO vo=new FoodVO();
+				   vo.setFno(rs.getInt(1));
+				   vo.setName(rs.getString(2));
+				   vo.setPoster("https://www.menupan.com"+rs.getString(3));
+				   list.add(vo);
+			   }
+			   rs.close();
+		   }catch(Exception ex)
+		   {
+			   // 에러 처리 
+			   ex.printStackTrace();
+		   }
+		   finally
+		   {
+			   // 오라클 닫기
+			   disConnection();
+		   }
+		   return list;
+	   }
+	   // 3-1 장르별 총페이지 
+	   public int foodGenreTotalPage(String genre)
+	   {
+		   int total=0;
+		   try
+		   {
+			   getConnection();
+			   String sql="SELECT CEIL(COUNT(*)/12.0) "
+					     +"FROM food_menupan "
+					     +"WHERE type LIKE '%'||?||'%'";
+			   ps=conn.prepareStatement(sql);
+			   // ? 
+			   ps.setString(1, genre);
+			   ResultSet rs=ps.executeQuery();
+			   rs.next();
+			   total=rs.getInt(1);
+			   rs.close();
+		   }catch(Exception ex)
+		   {
+			   ex.printStackTrace();
+		   }
+		   finally
+		   {
+			   disConnection();
+		   }
+		   return total;
+	   }
+	   
 }

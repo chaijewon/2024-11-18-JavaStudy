@@ -36,7 +36,7 @@ implements MouseListener,ActionListener
     	setLayout(null);
     	this.cp=cp;
     	pan.setLayout(new GridLayout(3,4,5,5));
-    	pan.setBounds(20, 15, 550, 570);
+    	pan.setBounds(20, 15, 550, 500);
     	add(pan);
     	
     	b1=new JButton("이전");
@@ -44,7 +44,7 @@ implements MouseListener,ActionListener
     	JPanel p=new JPanel();
     	p.add(b1); p.add(la); p.add(b2);
     	// add => 코딩 순서로 배치
-    	p.setBounds(20, 595, 550, 35);
+    	p.setBounds(20, 530, 550, 35);
     	add(p);
     	
     	
@@ -84,7 +84,7 @@ implements MouseListener,ActionListener
     	titleLa.setBounds(580, 15, 230, 45);
     	titleLa.setFont(new Font("맑은 고딕",Font.BOLD,25));
     	add(titleLa);
-    	js.setBounds(580,70, 230, 350);
+    	js.setBounds(580,70, 230, 450);
     	add(js);
     	b1.addActionListener(this);//이전
     	b2.addActionListener(this);//다음 
