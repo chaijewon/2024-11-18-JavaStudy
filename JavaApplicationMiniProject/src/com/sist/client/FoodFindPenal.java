@@ -3,10 +3,16 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;//Image , Layout
 import java.awt.event.*;
+import java.net.URL;
+
 import com.sist.vo.*;
+import com.sist.commons.ImageChange;
 import com.sist.dao.*;
+import java.util.List;
 // => 서버 연동 (X) 
-public class FoodFindPenal extends JPanel{
+public class FoodFindPenal extends JPanel
+implements ActionListener
+{
      ControlPanel cp; // 상세보기 
      JTable table; // 모양관리 
      DefaultTableModel model; // 데이터 관리
@@ -14,6 +20,7 @@ public class FoodFindPenal extends JPanel{
      JTextField tf; 
      JButton b;// 검색 
      TableColumn column;
+     FoodDAO dao=FoodDAO.newInstance();
      public FoodFindPenal(ControlPanel cp)
      {
     	 this.cp=cp;
@@ -46,6 +53,7 @@ public class FoodFindPenal extends JPanel{
     		 
     	 };
     	 table=new JTable(model);
+    	 table.setRowHeight(40);
     	 JScrollPane js1=new JScrollPane(table);
     	 
     	 for(int i=0;i<col.length;i++)
@@ -78,6 +86,53 @@ public class FoodFindPenal extends JPanel{
     	 add(tf); add(b); 
     	 add(js1);
     	 
+    	 b.addActionListener(this);
+    	 tf.addActionListener(this);
+    	 
      }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==b || e.getSource()==tf)
+		{
+			// 검색어 읽기
+			String address=tf.getText();
+			if(address.trim().length()<1)
+			{
+				tf.requestFocus();
+				return;
+			}
+			print(address);
+		}
+	}
+	public void print(String address)
+	{
+		// 테이블 데이터 지우기 
+		for(int i=model.getRowCount()-1;i>=0;i--)
+		{
+			model.removeRow(i);
+		}
+		
+		// 데이터 받기 
+		List<FoodVO> list=dao.foodFindData(address);
+		for(FoodVO vo:list)
+		{
+		  try
+		  {
+			URL url=new URL(vo.getPoster());
+			Image image=ImageChange.getImage(
+					new ImageIcon(url), 30, 30);
+			Object[] data={
+				vo.getFno(),
+				new ImageIcon(image),
+				vo.getName(),
+				vo.getAddress(),
+				vo.getType(),
+				vo.getScore()
+			};
+			model.addRow(data);
+		  }catch(Exception ex){}
+		}
+	}
      
 }

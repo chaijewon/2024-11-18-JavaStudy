@@ -249,5 +249,42 @@ public class FoodDAO {
 		   }
 		   return total;
 	   }
+	   // 4. 검색 => 주소 
+	   public List<FoodVO> foodFindData(String address)
+	   {
+		   List<FoodVO> list=
+				   new ArrayList<FoodVO>();
+		   try
+		   {
+			   getConnection();
+			   String sql="SELECT fno,poster,name,address,type,score,rownum "
+					     +"FROM food_menupan "
+					     +"WHERE address LIKE '%'||?||'%' AND rownum<=10 "
+					     +"ORDER BY fno ASC";
+			   ps=conn.prepareStatement(sql);
+			   ps.setString(1, address);
+			   ResultSet rs=ps.executeQuery();
+			   while(rs.next())
+			   {
+				   FoodVO vo=new FoodVO();
+				   vo.setFno(rs.getInt(1));
+				   vo.setPoster("https://www.menupan.com"+rs.getString(2));
+				   vo.setName(rs.getString(3));
+				   vo.setAddress(rs.getString(4));
+				   vo.setType(rs.getString(5));
+				   vo.setScore(rs.getDouble(6));
+				   list.add(vo);
+			   }
+			   rs.close();
+		   }catch(Exception ex)
+		   {
+			   ex.printStackTrace();
+		   }
+		   finally
+		   {
+			   disConnection();
+		   }
+		   return list;
+	   }
 	   
 }
