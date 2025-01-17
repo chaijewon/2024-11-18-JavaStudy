@@ -56,6 +56,18 @@ implements ActionListener,Runnable
 		
 		// Chat => Socket 
 		cp.cp.tf.addActionListener(this);
+		
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				try
+				{
+					out.write((Function.EXIT+"|\n").getBytes());
+				}catch(Exception ex) {}
+			}
+			
+		});
 	}
 	public static void main(String[] args) {
 		try
@@ -100,6 +112,27 @@ implements ActionListener,Runnable
 				  case Function.WAITCHAT:
 				  {
 					  cp.cp.ta.append(st.nextToken()+"\n");
+				  }
+				  break;
+				  case Function.MYEXIT:
+				  {
+					  dispose();
+					  System.exit(0);
+				  }
+				  break;
+				  // 남아 있는 사람 처리 
+				  case Function.EXIT:
+				  {
+					  String yid=st.nextToken();
+					  for(int i=0;i<cp.cp.model.getRowCount();i++)
+					  {
+						  String id=cp.cp.model.getValueAt(i, 0).toString();
+						  if(yid.equals(id))
+						  {
+							  cp.cp.model.removeRow(i);
+							  break;
+						  }
+					  }
 				  }
 				  break;
 				}
