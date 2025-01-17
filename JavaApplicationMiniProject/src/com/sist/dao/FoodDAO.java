@@ -286,5 +286,58 @@ public class FoodDAO {
 		   }
 		   return list;
 	   }
+	   /*
+	    *   NAME    NOT NULL VARCHAR2(500)  
+	TYPE    NOT NULL VARCHAR2(100)  
+	PHONE   NOT NULL VARCHAR2(20)   
+	ADDRESS NOT NULL VARCHAR2(700)  
+	SCORE            NUMBER(2,1)    
+	THEME   NOT NULL CLOB           
+	POSTER  NOT NULL VARCHAR2(300)  
+	IMAGES           VARCHAR2(4000) 
+	TIME    NOT NULL VARCHAR2(100)  
+	PARKING          VARCHAR2(200)  
+	CONTENT NOT NULL CLOB           
+	HIT              NUMBER         
+	PRICE            VARCHAR2(30)
+	    */
+	   public FoodVO foodDetailData(int fno)
+	   {
+		   FoodVO vo=new FoodVO();
+		   try
+		   {
+			   getConnection();
+			   String sql="SELECT name,type,phone,"
+					   +"address,score,theme,poster,"
+					   +"images,time,parking,content,"
+					   +"price "
+					   +"FROM food_menupan "
+					   +"WHERE fno="+fno;
+			   ps=conn.prepareStatement(sql);
+			   ResultSet rs=ps.executeQuery();
+			   rs.next();
+			   vo.setName(rs.getString(1));
+			   vo.setType(rs.getString(2));
+			   vo.setPhone(rs.getString(3));
+			   vo.setAddress(rs.getString(4));
+			   vo.setScore(rs.getDouble(5));
+			   vo.setTheme(rs.getString(6));
+			   vo.setPoster("https://www.menupan.com"+rs.getString(7));
+			   vo.setImages(rs.getString(8));
+			   vo.setTime(rs.getString(9));
+			   vo.setParking(rs.getString(10));
+			   vo.setContent(rs.getString(11));
+			   vo.setPrice(rs.getString(12));
+			   rs.close();
+		   }catch(Exception ex)
+		   {
+			   ex.printStackTrace();
+		   }
+		   finally
+		   {
+			   disConnection();
+		   }
+		   return vo;
+	   }
 	   
 }

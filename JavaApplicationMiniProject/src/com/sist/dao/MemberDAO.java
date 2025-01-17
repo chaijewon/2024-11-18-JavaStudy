@@ -1,6 +1,8 @@
 package com.sist.dao;
 // 로그인 / 회원가입 / 회원 탈퇴 / 회원수정 => 오라클 연결 
 import java.sql.*;
+import java.util.Date;
+
 import com.sist.vo.*;
 public class MemberDAO {
    private Connection conn;
@@ -100,6 +102,42 @@ public class MemberDAO {
 			   
 		   }
 		   
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   disConnection();
+	   }
+	   return vo;
+   }
+   // 회원 정보 
+   /*
+    *   private String id,pwd,name,sex,email,address,msg;
+        private Date regdate,birthday;
+    */
+   public MemberVO memberInfo(String id)
+   {
+	   MemberVO vo=new MemberVO();
+	   try
+	   {
+		   getConnection();
+		   String sql="SELECT name,sex,email,address,"
+				     +"regdate,birthday "
+				     +"FROM member "
+				     +"WHERE id=?";
+		   ps=conn.prepareStatement(sql);
+		   ps.setString(1, id);
+		   ResultSet rs=ps.executeQuery();
+		   rs.next();
+		   vo.setName(rs.getString(1));
+		   vo.setSex(rs.getString(2));
+		   vo.setEmail(rs.getString(3));
+		   vo.setAddress(rs.getString(4));
+		   vo.setRegdate(rs.getDate(5));
+		   vo.setBirthday(rs.getDate(6));
+		   rs.close();
 	   }catch(Exception ex)
 	   {
 		   ex.printStackTrace();

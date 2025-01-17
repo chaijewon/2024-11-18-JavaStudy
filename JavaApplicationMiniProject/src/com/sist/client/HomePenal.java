@@ -32,7 +32,8 @@ implements MouseListener,ActionListener
 	JLabel titleLa=new JLabel("인기 맛집 Top10",JLabel.CENTER);
     public HomePenal(ControlPanel cp)
     {
-    	// JPenal => FlowLayout - - - 
+    	// JPenal => FlowLayout - - -
+    	titleLa.setForeground(Color.magenta);
     	setLayout(null);
     	this.cp=cp;
     	pan.setLayout(new GridLayout(3,4,5,5));
@@ -68,6 +69,7 @@ implements MouseListener,ActionListener
     		
     	};
     	table=new JTable(model);
+    	table.getTableHeader().setReorderingAllowed(false);
     	table.setRowHeight(35);
     	JScrollPane js=new JScrollPane(table);
     	for(int i=0;i<col.length;i++)
@@ -147,7 +149,21 @@ implements MouseListener,ActionListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		for(int i=0;i<imgs.length;i++)
+		{
+			if(e.getSource()==imgs[i])
+			{
+				if(e.getClickCount()==2)
+				{
+					String fno=imgs[i].getToolTipText();
+					fno=fno.substring(fno.lastIndexOf("^")+1);
+					FoodVO vo=
+						dao.foodDetailData(Integer.parseInt(fno));
+					cp.fdp.detailPrint(1, vo);
+					cp.card.show(cp, "DETAIL");
+				}
+			}
+		}
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {

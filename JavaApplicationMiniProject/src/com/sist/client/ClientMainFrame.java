@@ -35,6 +35,8 @@ implements ActionListener,Runnable,MouseListener
     Login login=new Login();
 	// 배치 
     // 데이터베이스 
+    int selectRow=-1; // 테이블에서 선택이 안된 상태 
+    // 0번부터 시작 
     MemberDAO mDao=MemberDAO.newInstance();
 	public ClientMainFrame()
 	{
@@ -56,10 +58,12 @@ implements ActionListener,Runnable,MouseListener
 		mf.b1.addActionListener(this); // 홈 
 		mf.b2.addActionListener(this); // 맛집
 		mf.b3.addActionListener(this); // 검색
-		
+		mf.b7.addActionListener(this); // 뉴스 
 		// Chat => Socket 
 		cp.cp.tf.addActionListener(this);
 		cp.cp.table.addMouseListener(this);
+		cp.cp.b2.addActionListener(this);// 정보보기
+		cp.cp.b1.addActionListener(this);// 쪽지보내기
 		
 		addWindowListener(new WindowAdapter() {
 
@@ -194,6 +198,29 @@ implements ActionListener,Runnable,MouseListener
 				connection(vo);
 			}
 		}
+		else if(e.getSource()==cp.cp.b2)
+		{
+			if(selectRow==-1)
+			{
+				JOptionPane.showMessageDialog(this, 
+						"정보볼 대상을 선택하세요");
+				return;
+			}
+			
+			String id=cp.cp.model.getValueAt(selectRow, 0)
+					  .toString();
+			
+			MemberVO vo=mDao.memberInfo(id);
+			
+			String info="이름:"+vo.getName()+"\n"
+					   +"성별:"+vo.getSex()+"\n"
+					   +"이메일:"+vo.getEmail()+"\n"
+					   +"생년월일:"+vo.getBirthday().toString()+"\n"
+					   +"주소:"+vo.getAddress()+"\n"
+					   +"등록일:"+vo.getRegdate().toString();
+			JOptionPane.showMessageDialog(this, info);
+			
+		}
 		// chat처리 
 		else if(e.getSource()==cp.cp.tf)
 		{
@@ -228,6 +255,10 @@ implements ActionListener,Runnable,MouseListener
 		{
 			cp.card.show(cp, "FIND");
 		}
+		else if(e.getSource()==mf.b7)
+		{
+			cp.card.show(cp, "DETAIL");
+		}
 	}
 	public void connection(MemberVO vo)
 	{
@@ -256,7 +287,7 @@ implements ActionListener,Runnable,MouseListener
 		// TODO Auto-generated method stub
 		if(e.getSource()==cp.cp.table)
 		{
-			int selectRow=cp.cp.table.getSelectedRow();
+			selectRow=cp.cp.table.getSelectedRow();
 			String myId=getTitle();
 			String id=cp.cp.model.getValueAt(selectRow, 0).toString();
 			if(myId.equals(id))

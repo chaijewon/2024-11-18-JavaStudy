@@ -11,7 +11,7 @@ import com.sist.dao.*;
 import java.util.List;
 // => 서버 연동 (X) 
 public class FoodFindPenal extends JPanel
-implements ActionListener
+implements ActionListener,MouseListener
 {
      ControlPanel cp; // 상세보기 
      JTable table; // 모양관리 
@@ -54,6 +54,7 @@ implements ActionListener
     	 };
     	 table=new JTable(model);
     	 table.setRowHeight(40);
+    	 table.getTableHeader().setReorderingAllowed(false);
     	 JScrollPane js1=new JScrollPane(table);
     	 
     	 for(int i=0;i<col.length;i++)
@@ -88,6 +89,7 @@ implements ActionListener
     	 
     	 b.addActionListener(this);
     	 tf.addActionListener(this);
+    	 table.addMouseListener(this);
     	 
      }
 	@Override
@@ -122,10 +124,12 @@ implements ActionListener
 			URL url=new URL(vo.getPoster());
 			Image image=ImageChange.getImage(
 					new ImageIcon(url), 30, 30);
+			String name="<html><body><font color=blue>"
+					    +vo.getName()+"</font></body></html>";
 			Object[] data={
 				vo.getFno(),
 				new ImageIcon(image),
-				vo.getName(),
+				name,
 				vo.getAddress(),
 				vo.getType(),
 				vo.getScore()
@@ -133,6 +137,42 @@ implements ActionListener
 			model.addRow(data);
 		  }catch(Exception ex){}
 		}
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==table)
+		{
+			if(e.getClickCount()==2)
+			{
+				int row=table.getSelectedRow();
+				String fno=
+					model.getValueAt(row, 0).toString();
+				FoodVO vo=dao.foodDetailData(Integer.parseInt(fno));
+				cp.fdp.detailPrint(3, vo);
+				cp.card.show(cp, "DETAIL");
+			}
+		}
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
      
 }

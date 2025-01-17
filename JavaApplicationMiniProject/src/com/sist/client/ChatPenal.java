@@ -35,6 +35,7 @@ public class ChatPenal extends JPanel{
     		
     	};
     	table=new JTable(model);
+    	table.getTableHeader().setReorderingAllowed(false);
     	JScrollPane js1=new JScrollPane(table);
     	
     	// 배치 
