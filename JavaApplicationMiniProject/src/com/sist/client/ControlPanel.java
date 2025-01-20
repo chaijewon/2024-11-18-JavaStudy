@@ -13,6 +13,7 @@ public class ControlPanel extends JPanel{
     FoodGenrePenal fgp;
     FoodFindPenal ffp;
     FoodDetailPenal fdp;
+    BoardList bList;
     CardLayout card=new CardLayout();
     public ControlPanel()
     {
@@ -27,6 +28,9 @@ public class ControlPanel extends JPanel{
     	add("FIND",ffp);
     	fdp=new FoodDetailPenal(this);
     	add("DETAIL",fdp);
+    	
+    	bList=new BoardList(this);
+    	add("BLIST",bList);
     }
     
 }

@@ -139,7 +139,7 @@ implements ActionListener
     	 {
     		 URL url=new URL(vo.getPoster());
     		 Image img=
-    			ImageChange.getImage(new ImageIcon(url), 350, 500);
+    			ImageChange.getImage(new ImageIcon(url), 300, 500);
     		 poster.setIcon(new ImageIcon(img));
     		 
     		 name.setText(vo.getName());

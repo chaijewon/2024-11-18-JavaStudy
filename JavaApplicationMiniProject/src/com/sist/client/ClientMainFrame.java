@@ -59,6 +59,7 @@ implements ActionListener,Runnable,MouseListener
 		mf.b2.addActionListener(this); // 맛집
 		mf.b3.addActionListener(this); // 검색
 		mf.b7.addActionListener(this); // 뉴스 
+		mf.b5.addActionListener(this); // 커뮤니티
 		// Chat => Socket 
 		cp.cp.tf.addActionListener(this);
 		cp.cp.table.addMouseListener(this);
@@ -258,6 +259,10 @@ implements ActionListener,Runnable,MouseListener
 		else if(e.getSource()==mf.b7)
 		{
 			cp.card.show(cp, "DETAIL");
+		}
+		else if(e.getSource()==mf.b5)
+		{
+			cp.card.show(cp, "BLIST");
 		}
 	}
 	public void connection(MemberVO vo)
