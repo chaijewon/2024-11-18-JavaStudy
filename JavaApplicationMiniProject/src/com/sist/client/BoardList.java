@@ -7,7 +7,7 @@ import com.sist.dao.*;
 import com.sist.vo.*;
 import java.util.List;
 public class BoardList extends JPanel
-implements ActionListener
+implements ActionListener,MouseListener
 {
     JButton inBtn,prevBtn,nextBtn;
     JLabel pageLa,titleLa;
@@ -96,6 +96,9 @@ implements ActionListener
     	inBtn.addActionListener(this); // 새글 
     	prevBtn.addActionListener(this); // 이전
     	nextBtn.addActionListener(this); // 다음 
+    	
+    	// 상세보기 
+    	table.addMouseListener(this);
     }
     public void print()
     {
@@ -145,6 +148,63 @@ implements ActionListener
     }
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==inBtn)// 새글
+		{
+			// 초기화 
+			cp.bInsert.nameTf.setText("");
+			cp.bInsert.subTf.setText("");
+			cp.bInsert.ta.setText("");
+			cp.bInsert.pwdPf.setText("");
+			cp.card.show(cp, "BINSERT");
+			cp.bInsert.nameTf.requestFocus();
+		}
+		else if(e.getSource()==prevBtn)//이전
+		{
+			if(curpage>1)
+			{
+				curpage--;
+				print();
+			}
+		}
+		else if(e.getSource()==nextBtn)// 다음 
+		{
+			if(curpage<totalpage)
+			{
+				curpage++;
+				print();
+			}
+		}
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==table)
+		{
+			if(e.getClickCount()==2)
+			{
+				cp.card.show(cp,"BDETAIL");
+				// Database연동 
+			}
+		}
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

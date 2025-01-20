@@ -130,6 +130,31 @@ public class ReplyBoardDAO {
 		return total;
 	}
 	// 2. 글쓰기 => INSERT 
+	// 매개변수가 3개이상 => 배열 / VO를 이용한다 
+	public void boardInsert(ReplyBoardVO vo)
+	{
+		try
+		{
+			getConnection();
+			// 새로운 그룹 생성 => 그룹번호 : group_id 
+			String sql="INSERT INTO replyBoard(no,name,subject,content,pwd,group_id) "
+					+ "VALUES(rb_no_seq.nextval,?,?,?,?,"
+					+ "(SELECT NVL(MAX(group_id)+1,1) FROM replyBoard))";
+			ps=conn.prepareStatement(sql);
+			ps.setString(1, vo.getName());
+			ps.setString(2, vo.getSubject());
+			ps.setString(3, vo.getContent());
+			ps.setString(4, vo.getPwd());
+			ps.executeUpdate(); // commit()을 수행 
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			disConnection();
+		}
+	}
 	// 3. 상세보기 => WHERE 
 	// 4. 수정 => UPDATE 
 	// 5. 답변 => 트랜잭션 
