@@ -335,6 +335,38 @@ public class ReplyBoardDAO {
 		return bCheck;
 	}
 	// 5. 답변 => 트랜잭션 
+	/*
+	 *    // => 100% / INDEX / VIEW 
+	 *    BLOB / BFILE
+	 *    GET/POST 
+	 *    --------- SESSION / COOKIE 
+	 *    --------- MVC 
+	 *    --------- DI / AOP / ORM 
+	 *    --------- Framework / Boot 
+	 *    
+	 *    try
+	 *    {
+	 *       getConnection(); 연결 
+	 *       conn.setAutoCommit(false); commit 해제 
+	 *       ----------------
+	 *       SQL => INSERT
+	 *       SQL => INSERT
+	 *       ----------------
+	 *       conn.commit();
+	 *    }catch(Exception ex)
+	 *    {
+	 *       ex.printStackTrace()
+	 *       try
+	 *       {
+	 *          conn.rollback() => SQL명령문 취소
+	 *       }catch(Exception e){}
+	 *    }
+	 *    finally
+	 *    {
+	 *       conn.setAutoCommit(true)
+	 *       disConnection()
+	 *    }
+	 */
 	// 6. 삭제 => 트랜잭션 
 	
 	
