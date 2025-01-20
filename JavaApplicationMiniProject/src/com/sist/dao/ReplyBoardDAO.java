@@ -158,7 +158,7 @@ public class ReplyBoardDAO {
 	// 3. 상세보기 => WHERE 
 	// 입고 => 재고 
 	// 
-	public ReplyBoardVO boardDetailData(int no)
+	public ReplyBoardVO boardDetailData(int type,int no)
 	{
 		// => 상세보기 : 반드시 사용자로부터 Primary key 
 		ReplyBoardVO vo=new ReplyBoardVO();
@@ -168,13 +168,16 @@ public class ReplyBoardDAO {
 			getConnection();
 			// 2. SQL문장 제작 
 			// SQL 1. 조회수 증가 
-			String sql="UPDATE replyBoard SET "
-					  +"hit=hit+1 "
-					  +"WHERE no="+no;
-			ps=conn.prepareStatement(sql);
-			ps.executeUpdate(); // => COMMIT
+			if(type==1)
+			{
+				String sql="UPDATE replyBoard SET "
+						  +"hit=hit+1 "
+						  +"WHERE no="+no;
+				ps=conn.prepareStatement(sql);
+				ps.executeUpdate(); // => COMMIT
+			}
 			// SQL 2. 상세보기 내용 읽기 
-			sql="SELECT no,name,subject,content,"
+			String sql="SELECT no,name,subject,content,"
 			   +"TO_CHAR(regdate,'YYYY-MM-DD HH24:MI:SS'),hit "
 			   +"FROM replyBoard "
 			   +"WHERE no="+no;

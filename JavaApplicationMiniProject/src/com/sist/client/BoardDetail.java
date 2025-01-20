@@ -88,8 +88,12 @@ implements ActionListener
     	 b3.addActionListener(this);//목록
     	 b4.addActionListener(this);//답변 
      }
-     public void print(ReplyBoardVO vo)
+     public void print(int type,int n)
      {
+    	 // 데이터베이스 연동 
+    	 ReplyBoardDAO dao=
+    			 ReplyBoardDAO.newInstance();
+    	 ReplyBoardVO vo=dao.boardDetailData(type,n);
     	 name.setText(vo.getName());
     	 no.setText(String.valueOf(vo.getNo()));
     	 day.setText(vo.getDbday());

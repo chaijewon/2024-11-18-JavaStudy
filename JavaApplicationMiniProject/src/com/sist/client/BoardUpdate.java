@@ -121,6 +121,33 @@ implements ActionListener
 			String no=noLa.getText();
 			
 			// no를 전송 
+			ReplyBoardVO vo=new ReplyBoardVO();
+			vo.setName(name);
+			vo.setSubject(subject);
+			vo.setContent(content);
+			vo.setPwd(pwd);
+			vo.setNo(Integer.parseInt(no));
+			
+			// 오라클 연결 
+			ReplyBoardDAO dao=
+					ReplyBoardDAO.newInstance();
+			boolean bCheck=dao.boardUpdate(vo);
+			
+			// List => Detail => 조회수 증가 (O) => type==1
+			// Update => Detail => 조회수 증가(X) => type==2
+			if(bCheck==true)// 수정한 상태
+			{
+				cp.card.show(cp, "BDETAIL");
+				cp.bDetail.print(2,vo.getNo());
+				// 조회수가 증가없이 
+			}
+			else // 비밀번호가 틀리다
+			{
+				JOptionPane.showMessageDialog(this, 
+						"비밀번호가 틀립니다\n다시 입력하세요");
+				pwdPf.setText("");
+				pwdPf.requestFocus();
+			}
 			
 		}
 	}
