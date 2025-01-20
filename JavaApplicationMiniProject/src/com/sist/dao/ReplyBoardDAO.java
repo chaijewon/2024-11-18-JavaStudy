@@ -203,6 +203,134 @@ public class ReplyBoardDAO {
 		return vo;
 	}
 	// 4. 수정 => UPDATE 
+	public ReplyBoardVO boardUpdateData(int no)
+	{
+		ReplyBoardVO vo=new ReplyBoardVO();
+		try
+		{
+			getConnection();
+			String sql="SELECT no,name,subject,content "
+					  +"FROM replyBoard "
+					  +"WHERE no="+no;
+			ps=conn.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			rs.next();
+			vo.setNo(rs.getInt(1));
+			vo.setName(rs.getString(2));
+			vo.setSubject(rs.getString(3));
+			vo.setContent(rs.getString(4));
+			rs.close();
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			disConnection();
+		}
+		return vo;
+	}
+	// 4-1. 실제 수정 
+	public boolean boardUpdate(ReplyBoardVO vo)
+	{
+		boolean bCheck=false;// 비밀번호 처리 
+		/*
+		 *    메소드 : 사용자 요청 처리 => 벤치마킹 : 메뉴,버튼 
+		 *    1) 사용자 요청값을 받는다
+		 *       => 매개변수  
+		 *    2) 요청처리후에 결과값 
+		 *       => 경우의 수 
+		 *       1. 목록 : List<~VO> 
+		 *       2. 상세보기 : ~VO
+		 *       3. 비밀번호 맞다 / 아니다 
+		 *                 ------------ boolean 
+		 *       4. 경우의 수가 3개 이상 
+		 *          String / int 
+		 *          ------ 알아볼 수 있게 처리 
+		 *          | 로그인 처리 
+		 *            => NOID / NOPWD / OK
+		 *     ---------------------------------
+		 *        자바 => 메소드 제작 
+		 *               --------- 데이터 확인 (VO) 
+		 *               
+		 *     1. 형식 => String  
+		 *        = INSERT 
+		 *          => DEFAULT가 많은 경우
+		 *          INSERT INTO table_name(컬럼,컬럼...)
+		 *          VLAUES(값...)
+		 *          => DEFAULT가 없는 경우 
+		 *          INSERT INTO table_name VALUES(값...)
+		 *          => 날짜 / 문자 => ''
+		 *             ---------------
+		 *             setString(1,값) => '값'
+		 *        = UPDATE 
+		 *          UPDATE table_name SET
+		 *          컬럼=값,컬럼=값....
+		 *          [WHERE 조건]
+		 *          
+		 *        = DELETE
+		 *          DELETE FROM table_name
+		 *          [WHERE 조건]
+		 *        --------------------------- 데이터가 변경된다 Commit 
+		 *          => COMMIT을 포함한 메소드 호출 
+		 *             executeUpdate()
+		 *        = SELECT : 이미 저장된 데이터를 검색
+		 *             데이터을 읽기 
+		 *             executeQuery()
+		 *             --------------- ResultSet 
+		 *      -----------------------------------
+		 *      웹개발 => 80% => DAO/VO
+		 *      ============  좌절감 => React => TanStack Query 
+		 *                                     ---------------
+		 *                                      Redux / Next
+		 */
+		try
+		{
+			getConnection();
+			// 1. SQL => 비밀번호 
+			String sql="SELECT pwd FROM replyBoard "
+					  +"WHERE no="+vo.getNo();
+			ps=conn.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			rs.next();
+			String db_pwd=rs.getString(1);
+			rs.close();
+			
+			// 오라클에 존재    사용자가 보내준 비밀번호
+			if(db_pwd.equals(vo.getPwd()))
+			{
+				bCheck=true;
+				// 실제 수정 
+				sql="UPDATE replyBoard SET "
+				   +"name=?,subject=?,content=? "
+				   +"WHERE no=?";
+				ps=conn.prepareStatement(sql);
+				ps.setString(1, vo.getName()); // '홍길동'
+				ps.setString(2, vo.getSubject());
+				ps.setString(3, vo.getContent());
+				ps.setInt(4, vo.getNo());
+				
+				// 수정해라 
+				ps.executeUpdate();
+				// INSERT / UPDATE / DELETE가 여러개인 경우 => 트랜잭션
+				// SELECT : 검색 => COMMIT이 필요 없다 
+				
+			}
+			else
+			{
+				bCheck=false;
+			}
+			
+		}catch(Exception ex)
+		{
+			
+		}
+		finally
+		{
+			
+		}
+		return bCheck;
+	}
 	// 5. 답변 => 트랜잭션 
 	// 6. 삭제 => 트랜잭션 
 	
