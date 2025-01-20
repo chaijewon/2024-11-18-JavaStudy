@@ -156,6 +156,52 @@ public class ReplyBoardDAO {
 		}
 	}
 	// 3. 상세보기 => WHERE 
+	// 입고 => 재고 
+	// 
+	public ReplyBoardVO boardDetailData(int no)
+	{
+		// => 상세보기 : 반드시 사용자로부터 Primary key 
+		ReplyBoardVO vo=new ReplyBoardVO();
+		try
+		{
+			// 1. 연결 
+			getConnection();
+			// 2. SQL문장 제작 
+			// SQL 1. 조회수 증가 
+			String sql="UPDATE replyBoard SET "
+					  +"hit=hit+1 "
+					  +"WHERE no="+no;
+			ps=conn.prepareStatement(sql);
+			ps.executeUpdate(); // => COMMIT
+			// SQL 2. 상세보기 내용 읽기 
+			sql="SELECT no,name,subject,content,"
+			   +"TO_CHAR(regdate,'YYYY-MM-DD HH24:MI:SS'),hit "
+			   +"FROM replyBoard "
+			   +"WHERE no="+no;
+			ps=conn.prepareStatement(sql);
+			// 한 기능을 수행할때 => SQL은 여러개일 수 있다
+			ResultSet rs=ps.executeQuery();
+			rs.next();
+			vo.setNo(rs.getInt(1));
+			vo.setName(rs.getString(2));
+			vo.setSubject(rs.getString(3));
+			vo.setContent(rs.getString(4));
+			vo.setDbday(rs.getString(5));
+			vo.setHit(rs.getInt(6));
+			// * => DESC순서 
+			rs.close();
+		}catch(Exception ex)
+		{
+			// 복구 => 오류체크 
+			ex.printStackTrace();
+		}
+		finally
+		{
+			// 닫기 
+			disConnection();
+		}
+		return vo;
+	}
 	// 4. 수정 => UPDATE 
 	// 5. 답변 => 트랜잭션 
 	// 6. 삭제 => 트랜잭션 

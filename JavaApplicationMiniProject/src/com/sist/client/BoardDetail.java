@@ -1,9 +1,15 @@
 package com.sist.client;
+import java.awt.Color;
 import java.awt.Font;
 
 // detail.jsp
 import javax.swing.*;
-public class BoardDetail extends JPanel{
+
+import com.sist.vo.ReplyBoardVO;
+import java.awt.event.*;
+public class BoardDetail extends JPanel
+implements ActionListener
+{
      JLabel titleLa,nameLa,noLa,subLa,dayLa,hitLa;
      JLabel name,no,sub,day,hit;
      JTextArea ta;
@@ -12,38 +18,52 @@ public class BoardDetail extends JPanel{
      public  BoardDetail(ControlPanel cp)
      {
     	 this.cp=cp;
-    	 titleLa=new JLabel("게시판",JLabel.CENTER);// <table>
+    	 titleLa=new JLabel("내용보기",JLabel.CENTER);// <table>
      	 titleLa.setFont(new Font("맑은 고딕",Font.BOLD,30)); //<h3></h3>
+     	 
      	 setLayout(null);
     	 titleLa.setBounds(10, 15, 830, 50);
     	 add(titleLa);
     	 
     	 noLa=new JLabel("번호",JLabel.CENTER);
     	 noLa.setBounds(100, 75 , 80, 30);
+    	 noLa.setBackground(Color.GREEN);
+     	 noLa.setOpaque(true);
     	 no=new JLabel("",JLabel.CENTER);
     	 no.setBounds(185, 75, 120, 30);
     	 add(noLa);add(no);
     	 
     	 dayLa=new JLabel("작성일",JLabel.CENTER);
     	 dayLa.setBounds(310, 75 , 80, 30);
+    	 dayLa.setBackground(Color.GREEN);
+     	 dayLa.setOpaque(true);
     	 day=new JLabel("",JLabel.CENTER);
     	 day.setBounds(395, 75, 200, 30);
     	 add(dayLa);add(day);
     	 
     	 nameLa=new JLabel("이름",JLabel.CENTER);
     	 nameLa.setBounds(100, 110 , 80, 30);
+    	 nameLa.setBackground(Color.GREEN);
+     	 nameLa.setOpaque(true);
     	 name=new JLabel("",JLabel.CENTER);
     	 name.setBounds(185, 110, 120, 30);
     	 add(nameLa);add(name);
     	 
     	 hitLa=new JLabel("조회수",JLabel.CENTER);
     	 hitLa.setBounds(310, 110 , 80, 30);
+    	 hitLa.setBackground(Color.GREEN);
+     	 hitLa.setOpaque(true);
+     	 // JLabel => 투명 모드 
+     	 // => 불투명 모드 
+     	 // opacity 
     	 hit=new JLabel("",JLabel.CENTER);
     	 hit.setBounds(395, 110, 200, 30);
     	 add(hitLa);add(hit);
     	 
     	 subLa=new JLabel("제목",JLabel.CENTER);
     	 subLa.setBounds(100, 145 , 80, 30);
+    	 subLa.setBackground(Color.GREEN);
+     	 subLa.setOpaque(true);
     	 sub=new JLabel("");
     	 sub.setBounds(185, 145, 400, 30);
     	 add(subLa);add(sub);
@@ -61,5 +81,43 @@ public class BoardDetail extends JPanel{
     	 p.add(b4);p.add(b1);p.add(b2);p.add(b3);
     	 p.setBounds(100, 440, 485, 35);
     	 add(p);
+    	 
+    	 b1.addActionListener(this);//수정 
+    	 b2.addActionListener(this);//삭제
+    	 b3.addActionListener(this);//목록
+    	 b4.addActionListener(this);//답변 
      }
+     public void print(ReplyBoardVO vo)
+     {
+    	 name.setText(vo.getName());
+    	 no.setText(String.valueOf(vo.getNo()));
+    	 day.setText(vo.getDbday());
+    	 hit.setText(String.valueOf(vo.getHit()));
+    	 sub.setText(vo.getSubject());
+    	 ta.setText(vo.getContent());
+    	 
+     }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==b3)
+		{
+			cp.card.show(cp,"BLIST");// 목록으로 이동
+			cp.bList.print();// 데이터베이스에서 다시 읽기
+			// 웹 => javascript:history.back() => 조회수 증가가 안된다
+			// <a href="list.jsp">목록</a>
+		}
+		else if(e.getSource()==b1)// 수정
+		{
+			
+		}
+		else if(e.getSource()==b2)// 삭제
+		{
+			
+		}
+		else if(e.getSource()==b4)// 답변
+		{
+			
+		}
+	}
 }

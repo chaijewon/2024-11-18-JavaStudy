@@ -183,8 +183,17 @@ implements ActionListener,MouseListener
 		{
 			if(e.getClickCount()==2)
 			{
+				int row=table.getSelectedRow();
+				// 클릭 위치 => 게시물 번호 읽기
+				String no=model.getValueAt(row, 0).toString();
+				
+				ReplyBoardVO vo=dao.boardDetailData(Integer.parseInt(no));
+				
+				// 윈도우 / 웹 => 정수(X) , 문자열 => 문자열=>정수형으로 변경 
 				cp.card.show(cp,"BDETAIL");
 				// Database연동 
+				cp.bDetail.print(vo);
+				
 			}
 		}
 	}
