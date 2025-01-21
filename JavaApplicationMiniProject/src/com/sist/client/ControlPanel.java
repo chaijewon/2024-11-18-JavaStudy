@@ -18,6 +18,7 @@ public class ControlPanel extends JPanel{
     BoardDetail bDetail;
     BoardUpdate bUpdate;
     BoardReply bReply;
+    BoardDelete bDelete;
     CardLayout card=new CardLayout();
     public ControlPanel()
     {
@@ -43,6 +44,9 @@ public class ControlPanel extends JPanel{
     	add("BUPDATE",bUpdate);
     	bReply=new BoardReply(this);
     	add("BREPLY",bReply);
+    	bDelete=new BoardDelete(this); // => jsp(메소드) => URL주소
+    	// delete.jsp?no=10&pwd=1234 => JSP에서는 메소드를 만들 수 없다 
+    	add("BDELETE",bDelete);
     	
     	/*
     	 *    사용자 요청 ==> ControlPanel => 화면 이동 

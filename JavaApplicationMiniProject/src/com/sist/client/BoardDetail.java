@@ -125,6 +125,13 @@ implements ActionListener
 		}
 		else if(e.getSource()==b2)// 삭제
 		{
+			String strNo=no.getText();
+			cp.bDelete.pf.setText("");
+			// 화면 이동 
+			cp.card.show(cp,"BDELETE");
+			// strNo 전송 
+			cp.bDelete.noLa.setText(strNo);
+			cp.bDelete.pf.requestFocus();
 			
 		}
 		/*

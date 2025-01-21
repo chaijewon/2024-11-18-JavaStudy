@@ -443,6 +443,14 @@ public class ReplyBoardDAO {
 		}
 	}
 	// 6. 삭제 => 트랜잭션 
+	// @Transactional
+	/*
+	 *   A a=new A();
+	 *   
+	 *   @Autowired
+	 *   A a;
+	 *   => Boot
+	 */
 	public boolean replyDelete(int no,String pwd)
 	{
 		boolean bCheck=false;
@@ -453,6 +461,95 @@ public class ReplyBoardDAO {
 		 *      => >0 ==> update
 		 *   3. depth 감소 update 
 		 */
+		try
+		{
+			getConnection();
+			conn.setAutoCommit(false);
+			// SQL
+			String sql="SELECT pwd,root,depth "
+					  +"FROM replyBoard "
+					  +"WHERE no="+no;
+			ps=conn.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			rs.next();
+			String db_pwd=rs.getString(1);
+			int root=rs.getInt(2);
+			int depth=rs.getInt(3);
+			rs.close();
+			/*
+			 *    AAAAA => 2
+			 *     =>BBBBB => 1
+			 *      =>CCCCC (O) => 0
+			 *     =>DDDDD (O) => 0
+			 *    EEEEE (O) => 0
+			 */
+			if(db_pwd.equals(pwd))
+			{
+				bCheck=true;
+				
+				sql="SELECT depth FROM replyBoard "
+						   +"WHERE no="+root;
+				ps=conn.prepareStatement(sql);
+				rs=ps.executeQuery();
+				rs.next();
+				int d=rs.getInt(1);
+				rs.close();
+				// 삭제 
+				if(depth==0) // 답변이 없는 경우
+				{
+					sql="DELETE FROM replyBoard "
+					   +"WHERE no="+no;
+					ps=conn.prepareStatement(sql);
+					ps.executeUpdate();
+				}
+				else // 답변이 있는 경우 
+				{
+					String msg="관리자가 삭제한 게시물입니다";
+					sql="UPDATE replyBoard SET "
+					   +"subject=?,content=? "
+					   +"WHERE no=?";
+					ps=conn.prepareStatement(sql);
+					ps.setString(1, msg);
+					ps.setString(2, msg);
+					ps.setInt(3, no);
+					ps.executeUpdate();
+				}
+				
+				//if(d>0)
+				{
+					sql="UPDATE replyBoard SET "
+					   +"depth=depth-1 "
+					   +"WHERE no="+root;
+					ps=conn.prepareStatement(sql);
+					ps.executeUpdate();
+				}
+				// 메소드 한개 => SQL한개만 사용하는 것은 아니다 
+				// DML 여러개 => 트랜잭션처리 
+				// INSERT / UPDATE / DELETE 
+			}
+			else
+			{
+				bCheck=false;
+			}
+			
+			conn.commit();// 저장
+		}catch(Exception ex)
+		{
+			try
+			{
+				conn.rollback();// SQL을 실행하지 않는다
+			}catch(Exception e) {}
+			ex.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				conn.setAutoCommit(true);
+			}catch(Exception e) {}
+			disConnection();
+		}
+		// @Transactional
 		return bCheck;
 	}
 	

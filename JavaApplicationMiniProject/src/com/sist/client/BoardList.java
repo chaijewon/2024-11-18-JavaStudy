@@ -29,8 +29,8 @@ implements ActionListener,MouseListener
     	titleLa=new JLabel("게시판",JLabel.CENTER);// <table>
     	titleLa.setFont(new Font("맑은 고딕",Font.BOLD,30)); //<h3></h3>
     	
-    	String[] col={"번호","제목","이름","작성일","조회수"};//<tr><th></th>....</tr>
-    	String[][] row=new String[0][5];
+    	String[] col={"번호","","제목","이름","작성일","조회수"};//<tr><th></th>....</tr>
+    	String[][] row=new String[0][6];
     	// 한줄에 5개 데이터를 첨부 
     	model=new DefaultTableModel(row,col) // 데이터 관리
     	{
@@ -54,17 +54,21 @@ implements ActionListener,MouseListener
     		}
     		else if(i==1)
     		{
-    			column.setPreferredWidth(350);
+    			column.setPreferredWidth(0);
     		}
     		else if(i==2)
     		{
-    			column.setPreferredWidth(100);
+    			column.setPreferredWidth(350);
     		}
     		else if(i==3)
     		{
-    			column.setPreferredWidth(150);
+    			column.setPreferredWidth(100);
     		}
     		else if(i==4)
+    		{
+    			column.setPreferredWidth(150);
+    		}
+    		else if(i==5)
     		{
     			column.setPreferredWidth(50);
     		}
@@ -129,6 +133,7 @@ implements ActionListener,MouseListener
     			String subject="<html><body>"+s+"<font color=red>☞</font>"+vo.getSubject()+"</body></html>";
     			String[] data= {
     				String.valueOf(count),
+    				String.valueOf(vo.getNo()),
     				subject,
     				vo.getName(),
     				vo.getDbday(),
@@ -141,6 +146,7 @@ implements ActionListener,MouseListener
     		{
     			String[] data= {
         				String.valueOf(count),
+        				String.valueOf(vo.getNo()),
         				vo.getSubject(),
         				vo.getName(),
         				vo.getDbday(),
@@ -191,7 +197,7 @@ implements ActionListener,MouseListener
 			{
 				int row=table.getSelectedRow();
 				// 클릭 위치 => 게시물 번호 읽기
-				String no=model.getValueAt(row, 0).toString();
+				String no=model.getValueAt(row, 1).toString();
 				
 				// 윈도우 / 웹 => 정수(X) , 문자열 => 문자열=>정수형으로 변경 
 				cp.card.show(cp,"BDETAIL");
