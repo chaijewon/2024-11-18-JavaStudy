@@ -52,10 +52,7 @@ implements ActionListener,MouseListener
     		{
     			column.setPreferredWidth(50);
     		}
-    		else if(i==1)
-    		{
-    			column.setPreferredWidth(0);
-    		}
+    		
     		else if(i==2)
     		{
     			column.setPreferredWidth(350);
@@ -73,6 +70,10 @@ implements ActionListener,MouseListener
     			column.setPreferredWidth(50);
     		}
     	}
+    	
+    	table.getColumnModel().removeColumn(
+    			table.getColumnModel().getColumn(1));
+    	
     	table.getTableHeader().setReorderingAllowed(false);
     	table.setShowVerticalLines(false);
     	table.setRowHeight(30);
