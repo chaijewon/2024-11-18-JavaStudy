@@ -220,6 +220,7 @@ implements ActionListener,Runnable,MouseListener
 					   +"주소:"+vo.getAddress()+"\n"
 					   +"등록일:"+vo.getRegdate().toString();
 			JOptionPane.showMessageDialog(this, info);
+			selectRow=-1;
 			
 		}
 		// chat처리 

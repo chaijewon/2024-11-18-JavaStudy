@@ -127,9 +127,25 @@ implements ActionListener
 		{
 			
 		}
+		/*
+		 *   윈도우 => 화면 변경 => 메모리 해제 
+		 *           => 초기화가 안된다 
+		 *   웹 => list.jsp => 생성 
+		 *         list.jsp => 해제 , 생성 
+		 *         -------- 자동으로 자바로 변경
+		 */
 		else if(e.getSource()==b4)// 답변
 		{
-			
+			String strNo=no.getText(); // 번호 
+			// 초기화
+			cp.bReply.nameTf.setText("");
+			cp.bReply.subTf.setText("");
+			cp.bReply.ta.setText("");
+			cp.bReply.pwdPf.setText("");
+			// 화면 이동 
+			cp.card.show(cp, "BREPLY");
+			// => strNo을 전송 
+			cp.bReply.noLa.setText(strNo);
 		}
 	}
 }

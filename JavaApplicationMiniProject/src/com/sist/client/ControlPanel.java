@@ -17,6 +17,7 @@ public class ControlPanel extends JPanel{
     BoardInsert bInsert;
     BoardDetail bDetail;
     BoardUpdate bUpdate;
+    BoardReply bReply;
     CardLayout card=new CardLayout();
     public ControlPanel()
     {
@@ -40,6 +41,18 @@ public class ControlPanel extends JPanel{
     	add("BDETAIL",bDetail);
     	bUpdate=new BoardUpdate(this);
     	add("BUPDATE",bUpdate);
+    	bReply=new BoardReply(this);
+    	add("BREPLY",bReply);
+    	
+    	/*
+    	 *    사용자 요청 ==> ControlPanel => 화면 이동 
+    	 *                             필요한 데이터 전송 
+    	 *                             
+    	 *    사용자 요청 ==> Controller => Model 
+    	 *                                 |=> 데이터전송
+    	 *                                화면이동(View):JSP
+    	 *    => MVC (Spring형식) 
+    	 */
     }
     
 }

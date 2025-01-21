@@ -109,8 +109,12 @@ implements ActionListener,MouseListener
     	}
     	// 데이터 받기 
     	List<ReplyBoardVO> list=dao.boardListData(curpage);
-    	totalpage=dao.boardTotalPage();
-    	
+    	int count=dao.boardRowCount();
+    	totalpage=(int)(Math.ceil(count/10.0));
+    	count=count-((curpage*10)-10);
+    	// 번호를 순차적 출력 0 -10 -20 -30
+    	// 50~ 40 30 20 10 
+    	// 16 => 6
     	// 출력 => 테이블 
     	for(ReplyBoardVO vo:list)
     	{
@@ -124,18 +128,19 @@ implements ActionListener,MouseListener
     			}
     			String subject="<html><body>"+s+"<font color=red>☞</font>"+vo.getSubject()+"</body></html>";
     			String[] data= {
-    				String.valueOf(vo.getNo()),
+    				String.valueOf(count),
     				subject,
     				vo.getName(),
     				vo.getDbday(),
     				String.valueOf(vo.getHit())
     			};
     			model.addRow(data);
+    			
     		}
     		else // 답변이 아닌 경우 => 새글 
     		{
     			String[] data= {
-        				String.valueOf(vo.getNo()),
+        				String.valueOf(count),
         				vo.getSubject(),
         				vo.getName(),
         				vo.getDbday(),
@@ -143,6 +148,7 @@ implements ActionListener,MouseListener
         			};
     			model.addRow(data);
     		}
+    		count--;
     	}
     	pageLa.setText(curpage+" page / "+totalpage+" pages");
     }

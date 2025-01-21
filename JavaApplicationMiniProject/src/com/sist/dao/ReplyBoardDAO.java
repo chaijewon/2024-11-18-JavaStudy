@@ -107,13 +107,13 @@ public class ReplyBoardDAO {
 		return list;
 	}
 	// 1-1. 총페이지 
-	public int boardTotalPage()
+	public int boardRowCount()
 	{
 		int total=0;
 		try
 		{
 			getConnection();
-			String sql="SELECT CEIL(COUNT(*)/10.0) FROM replyBoard";
+			String sql="SELECT COUNT(*) FROM replyBoard";
 			ps=conn.prepareStatement(sql);
 			ResultSet rs=ps.executeQuery();
 			rs.next();
@@ -326,11 +326,11 @@ public class ReplyBoardDAO {
 			
 		}catch(Exception ex)
 		{
-			
+			ex.printStackTrace();
 		}
 		finally
 		{
-			
+			disConnection();
 		}
 		return bCheck;
 	}
@@ -366,8 +366,94 @@ public class ReplyBoardDAO {
 	 *       conn.setAutoCommit(true)
 	 *       disConnection()
 	 *    }
+	 *                 group_id group_step group_tab root depth
+	 *    AAAAA             1       0          0            2
+	 *      =>DDDDD         1       1          1     0    0
+	 *      =>BBBBB         1       2          1
+	 *       =>CCCCCC       1       3          2
+	 *      
+	 *      
+	 *    ASC
 	 */
+	public void replyInsert(int pno,ReplyBoardVO vo)
+	{
+		try
+		{
+			getConnection();
+			conn.setAutoCommit(false);
+			// SQL => 4개 
+			// 답변대상의 group_id,group_step,group_tab
+			String sql="SELECT group_id,group_step,group_tab "
+					  +"FROM replyBoard "
+					  +"WHERE no="+pno;
+			ps=conn.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			rs.next();
+			int gi=rs.getInt(1);
+			int gs=rs.getInt(2);
+			int gt=rs.getInt(3);
+			rs.close();
+			
+			// 2.SQL => group_step을 변경 => 답변 핵심 
+			sql="UPDATE replyBoard SET "
+			   +"group_step=group_step+1 "
+			   +"WHERE group_id=? AND group_step>?";
+			ps=conn.prepareStatement(sql);
+			ps.setInt(1, gi);
+			ps.setInt(2, gs);
+			ps.executeUpdate(); // commit=>해제
+			
+			// 3. SQL => INSERT insert(sql,ReplyBoardVO vo)
+			sql="INSERT INTO replyBoard(no,name,subject,content,pwd,group_id,group_step,group_tab,root) "
+			+ "VALUES(rb_no_seq.nextval,?,?,?,?,?,?,?,?)";
+			ps=conn.prepareStatement(sql);
+			ps.setString(1, vo.getName());
+			ps.setString(2, vo.getSubject());
+			ps.setString(3, vo.getContent());
+			ps.setString(4, vo.getPwd());
+			ps.setInt(5, gi);
+			ps.setInt(6,gs+1);
+			ps.setInt(7, gt+1);
+			ps.setInt(8, pno);
+			ps.executeUpdate();
+			// 4. SQL => UPDATE
+			sql="UPDATE replyBoard SET "
+			   +"depth=depth+1 "
+			   +"WHERE no="+pno;
+			ps=conn.prepareStatement(sql);
+			ps.executeUpdate();
+			conn.commit();
+			// JSP => MyBatis 
+		}catch(Exception ex)
+		{
+			// 트랜잭션을 일괄처리 => 스프링 (1파트)
+			try
+			{
+				conn.rollback(); // 명령문 전체 취소 
+			}catch(Exception e) {}
+			ex.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				conn.setAutoCommit(true);//원상복귀
+			}catch(Exception ex) {}
+			disConnection();
+		}
+	}
 	// 6. 삭제 => 트랜잭션 
-	
+	public boolean replyDelete(int no,String pwd)
+	{
+		boolean bCheck=false;
+		/*
+		 *   1. 비밀번호 확인  select
+		 *   2. depth 
+		 *      => 0 ==> delete 
+		 *      => >0 ==> update
+		 *   3. depth 감소 update 
+		 */
+		return bCheck;
+	}
 	
 }
